@@ -1,0 +1,53 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: english-study
+
+  # ===============================
+  # MongoDB
+  # ===============================
+  # ===============================
+  # Security (Resource Server - JWT)
+  # ===============================
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8080}
+
+  # ===============================
+  # Docker Compose auto (Spring Boot hỗ trợ)
+  # ===============================
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_only
+  mongodb:
+    uri: ${MONGO_URI:mongodb://admin:123456@localhost:27017/english_db?authSource=admin}
+
+# ===============================
+# JWT custom config
+# ===============================
+jwt:
+  secret: ${JWT_SECRET:my-secret-key}
+  access-token-expiration: 3600000        # 1h (ms)
+  refresh-token-expiration: 604800000     # 7 ngày
+
+# ===============================
+# Logging
+# ===============================
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+# ===============================
+# Actuator (nếu sau này bạn thêm)
+# ===============================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
