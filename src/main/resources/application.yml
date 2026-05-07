@@ -51,3 +51,5 @@ management:
     web:
       exposure:
         include: "*"
+app:
+  default-role: ${DEFAULT_ROLE}

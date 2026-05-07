@@ -8,40 +8,42 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     public UserDTO toUserDTO(UserEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+        if (entity == null) return null;
 
         return UserDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .email(entity.getEmail())
-                .phoneNumber(entity.getPhoneNumber())
-                .firstName(entity.getFirstName())
-                .lastName(entity.getLastName())
-                .address(entity.getAddress())
-                .roleName(entity.getRoleId()) // Default mapping roleId to roleName
-                .orderIds(entity.getOrderIds())
-                .favoriteProductIds(entity.getFavoriteProductIds())
+                .fulltName(entity.getFulltName())
+                .isDelete(entity.isDelete())
+                .avatar(entity.getAvatar())
+                .roleId(entity.getRoleId())
+                .beginStreak(entity.getBeginStreak())
+                .endStreak(entity.getEndStreak())
+                .level(entity.getLevel())
+                .totalXP(entity.getTotalXP())
+                .refreshToken(entity.getRefreshToken())
+                .my_vocabs(entity.getMy_vocabs())
                 .build();
     }
 
     public UserEntity toUserEntity(UserDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+        if (dto == null) return null;
 
-        UserEntity entity = new UserEntity();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setAddress(dto.getAddress());
-        entity.setRoleId(dto.getRoleName());
-        entity.setOrderIds(dto.getOrderIds());
-        entity.setFavoriteProductIds(dto.getFavoriteProductIds());
-        return entity;
+        return UserEntity.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .fulltName(dto.getFulltName())
+                .isDelete(dto.isDelete())
+                .avatar(dto.getAvatar())
+                .roleId(dto.getRoleId())
+                .beginStreak(dto.getBeginStreak())
+                .endStreak(dto.getEndStreak())
+                .level(dto.getLevel())
+                .totalXP(dto.getTotalXP())
+                .refreshToken(dto.getRefreshToken())
+                .my_vocabs(dto.getMy_vocabs())
+                .build();
     }
 }

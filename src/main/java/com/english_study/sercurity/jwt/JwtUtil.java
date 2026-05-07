@@ -24,11 +24,11 @@ public class JwtUtil {
      */
     public String generateToken(UserDTO user) {
         return Jwts.builder()
-                .setSubject(user.getId()) // userId
+                .setSubject(user.getId())
+                .claim("type", "access")// userId
                 .claim("name", user.getName())
                 .claim("email", user.getEmail())
-                .claim("phoneNumber", user.getPhoneNumber())
-                .claim("role", user.getRoleName())
+                .claim("role", user.getRoleId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -100,7 +100,7 @@ public class JwtUtil {
      */
     public boolean validateToken(String token) {
         try {
-            Claims claims = extractAllClaims(token);
+
             return !isTokenExpired(token);
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -108,10 +108,28 @@ public class JwtUtil {
     }
     public String generateRefreshToken(String userId) {
         return Jwts.builder()
+                .claim("type", "refresh")
                 .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+
+            // check type
+            String type = claims.get("type", String.class);
+            if (!"refresh".equals(type)) {
+                return false;
+            }
+
+            // check expire
+            return !claims.getExpiration().before(new Date());
+
+        } catch (JwtException | IllegalArgumentException e) {
+           throw  new RuntimeException("Invalid refresh token");
+        }
     }
 }

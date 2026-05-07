@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
+import java.sql.Date;
 import java.util.List;
 
 @Data
@@ -13,24 +15,23 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDTO {
 
+    @Id
     private String id;
-
+    //    Thông tin cơ bản
     private String name;
-
     private String email;
+    private String fulltName;
+    private boolean isDelete;
+    private String avatar;
+    private String roleId;
+    //    dành cho chức năng streak
+    private Date beginStreak;
+    private Date endStreak;
 
-    private Long phoneNumber;
+    private String level;// B1, B2 ...
+    private int totalXP;
 
-    private String firstName;
+    private String refreshToken;//Token để xác thực và cấp lại accessToken
 
-    private String lastName;
-
-    private String address;
-
-    private String roleName;        // lấy từ role.getName()
-
-    private List<String> orderIds;    // từ list orders
-
-    private List<String> favoriteProductIds; // list favorite products
-
+    private List<String> my_vocabs;// danh sách id của các bộ từ vựng
 }

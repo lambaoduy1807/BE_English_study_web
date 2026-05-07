@@ -1,0 +1,460 @@
+{
+  "info": {
+    "name": "English Study API",
+    "description": "Collection for the English Study Spring Boot application, containing CRUD APIs for UserVocabSet, Video, VocabSet, and Word.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Vocab Sets",
+      "item": [
+        {
+          "name": "Get All User Vocab Sets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-vocab-sets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user-vocab-sets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Vocab Set By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-vocab-sets/65abc123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user-vocab-sets",
+                "65abc123"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User Vocab Set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userID\": \"user_123\",\n  \"vocabID\": \"vocab_456\",\n  \"learningProgress\": 50,\n  \"memoryWords\": [\"hello\", \"world\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-vocab-sets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user-vocab-sets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Vocab Set",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userID\": \"user_123\",\n  \"vocabID\": \"vocab_456\",\n  \"learningProgress\": 100,\n  \"memoryWords\": [\"hello\", \"world\", \"spring\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-vocab-sets/65abc123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user-vocab-sets",
+                "65abc123"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User Vocab Set",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-vocab-sets/65abc123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user-vocab-sets",
+                "65abc123"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Videos",
+      "item": [
+        {
+          "name": "Get All Videos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/videos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "videos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Video By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/videos/65def456",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "videos",
+                "65def456"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Video",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Learn English in 10 Minutes\",\n  \"url\": \"https://youtube.com/watch?v=123\",\n  \"upload_date\": \"2023-10-01\",\n  \"viewCount\": 1500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/videos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "videos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Video",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Learn English in 10 Minutes (Updated)\",\n  \"url\": \"https://youtube.com/watch?v=123\",\n  \"upload_date\": \"2023-10-01\",\n  \"viewCount\": 2500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/videos/65def456",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "videos",
+                "65def456"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Video",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/videos/65def456",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "videos",
+                "65def456"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vocab Sets",
+      "item": [
+        {
+          "name": "Get All Vocab Sets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vocab-sets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vocab-sets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Vocab Set By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vocab-sets/65ghi789",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vocab-sets",
+                "65ghi789"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Vocab Set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TOEIC Vocabulary 1\",\n  \"numOfWords\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vocab-sets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vocab-sets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Vocab Set",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TOEIC Vocabulary 1 (Updated)\",\n  \"numOfWords\": 55\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vocab-sets/65ghi789",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vocab-sets",
+                "65ghi789"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Vocab Set",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vocab-sets/65ghi789",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vocab-sets",
+                "65ghi789"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Words",
+      "item": [
+        {
+          "name": "Get All Words",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/words",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "words"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Word By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/words/65jkl012",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "words",
+                "65jkl012"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Word",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"word\": \"apple\",\n  \"mean\": \"quả táo\",\n  \"type\": \"noun\",\n  \"example\": \"I eat an apple every day.\",\n  \"vocabID\": \"65ghi789\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/words",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "words"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Word",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"word\": \"apple\",\n  \"mean\": \"quả táo (cập nhật)\",\n  \"type\": \"noun\",\n  \"example\": \"I eat a green apple every day.\",\n  \"vocabID\": \"65ghi789\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/words/65jkl012",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "words",
+                "65jkl012"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Word",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/words/65jkl012",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "words",
+                "65jkl012"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}

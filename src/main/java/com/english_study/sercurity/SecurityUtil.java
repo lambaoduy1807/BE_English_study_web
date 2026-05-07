@@ -16,7 +16,7 @@ public class SecurityUtil {
         return (JwtUserPrincipal) authentication.getPrincipal();
     }
 
-    public static UUID getCurrentUserId() {
+    public static String getCurrentUserId() {
         return getCurrentUser().getUserId();
     }
 

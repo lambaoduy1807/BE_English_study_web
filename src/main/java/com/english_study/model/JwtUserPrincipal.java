@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class JwtUserPrincipal {
-    private UUID userId;
+    private String userId;
     private String email;
     private String name;
     private Long phone;

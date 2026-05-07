@@ -42,7 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 Claims claims = jwtUtil.extractAllClaims(token);
 
-                UUID userId = UUID.fromString(claims.getSubject());
+                String userId = claims.getSubject();
                 String email = claims.get("email", String.class);
                 String role = claims.get("role", String.class);
                 String name = claims.get("name", String.class);
