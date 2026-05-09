@@ -53,3 +53,10 @@ management:
         include: "*"
 app:
   default-role: ${DEFAULT_ROLE}
+
+# ===============================
+# Mongock
+# ===============================
+mongock:
+  migration-scan-package:
+    - com.english_study.config.dbmigrations
