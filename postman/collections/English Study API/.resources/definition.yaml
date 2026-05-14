@@ -1,0 +1,10 @@
+apiVersion: v3
+kind: Collection
+metadata:
+  name: English Study API
+spec:
+  description: 'Collection for the English Study Spring Boot application, containing CRUD APIs for UserVocabSet, Video, VocabSet, and Word.'
+  variables:
+    - key: baseUrl
+      value: 'http://localhost:8080'
+      type: string

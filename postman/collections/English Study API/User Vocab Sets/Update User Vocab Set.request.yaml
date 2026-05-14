@@ -1,0 +1,16 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/user-vocab-sets/65abc123'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "userID": "user_123",
+      "vocabID": "vocab_456",
+      "learningProgress": 100,
+      "memoryWords": ["hello", "world", "spring"]
+    }

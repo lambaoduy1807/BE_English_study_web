@@ -1,0 +1,6 @@
+apiVersion: v3
+kind: Folder
+metadata:
+  name: Words
+spec:
+  description: CRUD endpoints for Words.

@@ -1,0 +1,4 @@
+$kind: http-request
+method: DELETE
+url: '{{baseUrl}}/api/user-vocab-sets/65abc123'
+order: 5000

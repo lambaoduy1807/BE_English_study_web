@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends MongoRepository<UserEntity, String> {
     UserEntity findByName(String userName);
+
+    boolean existsByName(String name);
     // Cập nhật đúng trường refreshToken dựa trên _id
     @Query("{ '_id' : ?0 }")
     @Update("{ '$set' : { 'refreshToken' : ?1 } }")

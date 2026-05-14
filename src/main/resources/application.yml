@@ -22,10 +22,10 @@ spring:
   # ===============================
   docker:
     compose:
-      enabled: true
+      enabled: false
       lifecycle-management: start_only
   mongodb:
-    uri: ${MONGO_URI:mongodb://admin:123456@localhost:27017/english_db?authSource=admin}
+    uri: ${MONGO_URI:mongodb+srv://admin:4osihJZgYo0747BU@cluster0.ewrxd44.mongodb.net/english_db?appName=Cluster0}
 
 # ===============================
 # JWT custom config

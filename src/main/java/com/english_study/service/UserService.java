@@ -1,5 +1,6 @@
 package com.english_study.service;
 
+import com.english_study.exception.UserAlreadyExistsException;
 import com.english_study.exception.UserNotFoundException;
 // Khuyến nghị tạo thêm InvalidCredentialsException cho lỗi sai mật khẩu
 import com.english_study.mapper.UserMapper;
@@ -36,8 +37,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO create(String email, String name, String password, String role) {
-        UserEntity user = new UserEntity(name, email, passwordEncoder.encode(password), role);
+    public UserDTO create(String email, String fullName, String name, String password, String role) {
+        if (userRepository.existsByName(name)) {
+            throw new UserAlreadyExistsException("Tên đăng nhập đã tồn tại!");
+        }
+
+        UserEntity user = new UserEntity(name, email, passwordEncoder.encode(password), fullName, role);
         user = userRepository.save(user);
         return userMapper.toUserDTO(user);
     }
