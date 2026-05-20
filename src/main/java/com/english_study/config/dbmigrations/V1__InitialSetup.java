@@ -29,7 +29,7 @@ public class V1__InitialSetup {
                 .name("nguyenvana")
                 .password("$2a$10$abcdefghijklmnopqrstuv") // dummy hash
                 .email("vana@gmail.com")
-                .fulltName("Nguyen Van A")
+                .fullName("Nguyen Van A")
                 .isDelete(false)
                 .avatar("avatar1.png")
                 .roleId("USER")
@@ -43,7 +43,7 @@ public class V1__InitialSetup {
                 .name("admin")
                 .password("$2a$10$xyzabcdefghijklmnopqrs") // dummy hash
                 .email("admin@gmail.com")
-                .fulltName("System Admin")
+                .fullName("System Admin")
                 .isDelete(false)
                 .avatar("admin.png")
                 .roleId("ADMIN")

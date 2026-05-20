@@ -25,7 +25,7 @@ public class UserEntity {
     private String name;
     private String password;
     private String email;
-    private String fulltName;
+    private String fullName;
     private boolean isDelete;
     private String avatar;
     private String roleId;
@@ -40,10 +40,11 @@ public class UserEntity {
 
     private List<String> my_vocabs;// danh sách id của các bộ từ vựng
 
-    public UserEntity(String username, String email, String password, String roleId) {
+    public UserEntity(String username, String email, String password, String fullName, String roleId) {
         this.name = username;
         this.password = password;
         this.email = email;
+        this.fullName = fullName;
         this.roleId = roleId;
     }
 }

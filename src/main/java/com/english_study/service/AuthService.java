@@ -42,6 +42,7 @@ public class AuthService {
 
         return userService.create(
                 request.email(),
+                request.fullName(),
                 request.username(),
                 request.password(),
                 Role.USER.getAuthority()

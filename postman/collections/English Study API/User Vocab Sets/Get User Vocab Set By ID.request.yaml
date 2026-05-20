@@ -1,0 +1,4 @@
+$kind: http-request
+method: GET
+url: '{{baseUrl}}/api/user-vocab-sets/65abc123'
+order: 2000

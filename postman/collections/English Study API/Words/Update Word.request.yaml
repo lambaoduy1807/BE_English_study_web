@@ -1,0 +1,17 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/words/65jkl012'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "word": "apple",
+      "mean": "qua tao (cap nhat)",
+      "type": "noun",
+      "example": "I eat a green apple every day.",
+      "vocabID": "65ghi789"
+    }

@@ -1,0 +1,6 @@
+name: production
+values:
+  - key: baseUrl
+    value: 'https://api.beelish.com'
+    enabled: true
+    type: default

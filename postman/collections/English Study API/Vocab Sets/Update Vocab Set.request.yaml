@@ -1,0 +1,14 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/vocab-sets/65ghi789'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "TOEIC Vocabulary 1 (Updated)",
+      "numOfWords": 55
+    }

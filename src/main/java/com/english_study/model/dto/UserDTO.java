@@ -20,7 +20,7 @@ public class UserDTO {
     //    Thông tin cơ bản
     private String name;
     private String email;
-    private String fulltName;
+    private String fullName;
     private boolean isDelete;
     private String avatar;
     private String roleId;
