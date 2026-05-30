@@ -49,6 +49,16 @@ public class GlobalException {
     }
 
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+        log.error("BAD_REQUEST: {}", ex.getMessage(), ex);
+
+        return ApiResponse.error(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handleException(Exception ex) {
         log.error("UNEXPECTED_ERROR: {}", ex.getMessage(), ex);

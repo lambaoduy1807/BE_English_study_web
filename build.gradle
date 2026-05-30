@@ -60,6 +60,8 @@ dependencies {
     // Mongock (MongoDB Migrations)
     implementation 'io.mongock:mongock-springboot-v3'
     implementation 'io.mongock:mongodb-springdata-v4-driver'
+//     Cloudỉay
+    implementation 'com.cloudinary:cloudinary-http44:1.39.0'
 }
 
 dependencyManagement {
