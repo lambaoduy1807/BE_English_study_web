@@ -6,20 +6,34 @@ import com.english_study.exception.UserNotFoundException;
 import com.english_study.mapper.UserMapper;
 import com.english_study.model.dto.UserDTO;
 import com.english_study.model.entity.UserEntity;
+import com.english_study.model.request.UpdateProfileRequest;
+import com.english_study.model.response.ApiResponse;
 import com.english_study.repository.UserRepository;
+import com.english_study.repository.UserDailyStatRepository;
+import com.english_study.model.entity.UserDailyStat;
+import com.english_study.model.entity.UserVocabSet;
+import com.english_study.model.response.UserStatsResponse;
+import com.english_study.repository.UserVocabSetRepository;
+import com.english_study.repository.UserStreakRepository;
+import com.english_study.model.entity.UserStreak;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final UserVocabSetRepository userVocabSetRepository;
+    private final UserStreakRepository userStreakRepository;
+    private final UserDailyStatRepository userDailyStatRepository;
 
     public UserDTO checkUser(String username, String password) {
         UserEntity user = userRepository.findByName(username);
@@ -48,9 +62,56 @@ public class UserService {
     }
 
     public UserDTO getUserByID(String id) {
-        // Tối ưu 6: Tận dụng Optional.map() của Java 8+ để code clean và gọn hơn
         return userRepository.findById(id)
                 .map(userMapper::toUserDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+
+    public UserDTO updateUser(String userID, UpdateProfileRequest updateRequest) {
+        UserEntity user = userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setEmail(updateRequest.email());
+        user.setLevel(updateRequest.level());
+        user.setFullName(updateRequest.name());
+        return userMapper.toUserDTO(userRepository.save(user));
+    }
+
+    public UserDTO updateAvatar(String userID, String avatarUrl) {
+        UserEntity user = userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setAvatar(avatarUrl);
+        return userMapper.toUserDTO(userRepository.save(user));
+    }
+
+    public UserStatsResponse getUserStats(String userID) {
+        UserEntity user = userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException("User not found"));
+        
+        List<UserVocabSet> vocabSets = userVocabSetRepository.findByUserID(userID);
+        int totalLearnedWords = 0;
+        if (vocabSets != null) {
+            for (UserVocabSet set : vocabSets) {
+                totalLearnedWords += set.getLearningProgress();
+            }
+        }
+        int currentStreak = 0;
+        int longestStreak = 0;
+        UserStreak userStreak = userStreakRepository.findByUserId(userID).orElse(null);
+        if (userStreak != null) {
+            currentStreak = userStreak.getCurrentStreak();
+            longestStreak = userStreak.getLongestStreak();
+        }
+        
+        int totalWordToday = userDailyStatRepository
+                .findByUserIdAndDate(userID, java.time.LocalDate.now())
+                .map(UserDailyStat::getNumMemorizeNew)
+                .orElse(0);
+        
+        return UserStatsResponse.builder()
+                .totalLearnedWords(totalLearnedWords)
+                .currentStreak(currentStreak)
+                .longestStreak(longestStreak)
+                .totalWordToday(totalWordToday)
+                .totalXp(user.getTotalXP())
+                .level(user.getLevel())
+                .rank(user.getRank())
+                .build();
     }
 }

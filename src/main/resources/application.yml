@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: english-study
+  config:
+    import: optional:file:.env[.properties]
 
   # ===============================
   # MongoDB
@@ -25,7 +27,7 @@ spring:
       enabled: false
       lifecycle-management: start_only
   mongodb:
-    uri: ${MONGO_URI:mongodb+srv://admin:4osihJZgYo0747BU@cluster0.ewrxd44.mongodb.net/english_db?appName=Cluster0}
+    uri: ${MONGO_URI:UnLoad}
 
 # ===============================
 # JWT custom config
@@ -60,3 +62,7 @@ app:
 mongock:
   migration-scan-package:
     - com.english_study.config.dbmigrations
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}

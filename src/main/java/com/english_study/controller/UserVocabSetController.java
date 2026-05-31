@@ -55,4 +55,5 @@ public class UserVocabSetController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 }
