@@ -17,6 +17,12 @@ import java.util.List;
 public class VocabSetEntity {
     @Id
     private String id;
-    private String name;
+    private String title;
     private int numOfWords;
+    private String icon;
+    private String iconWrapClass;
+    private String barClass;
+    private int categoryID;
+    private String created_at;
+
 }

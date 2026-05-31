@@ -23,6 +23,12 @@ public class UserVocabSetService {
                 .collect(Collectors.toList());
     }
 
+    public List<UserVocabSetDTO> getByUserId(String userId) {
+        return repository.findByUserID(userId).stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public UserVocabSetDTO getById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)

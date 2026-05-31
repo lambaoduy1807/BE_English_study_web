@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class VocabSetDTO {
     private String id;
-    private String name;
+    private String title;
     private int numOfWords;
+    private String icon;
+    private String iconWrapClass;
+    private String barClass;
+    private int categoryID;
 }

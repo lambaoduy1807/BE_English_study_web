@@ -12,8 +12,11 @@ public class VocabSetMapper {
 
         return VocabSetDTO.builder()
                 .id(entity.getId())
-                .name(entity.getName())
+                .title(entity.getTitle())
                 .numOfWords(entity.getNumOfWords())
+                .icon(entity.getIcon())
+                .iconWrapClass(entity.getIconWrapClass())
+                .barClass(entity.getBarClass())
                 .build();
     }
 
@@ -22,8 +25,11 @@ public class VocabSetMapper {
 
         return VocabSetEntity.builder()
                 .id(dto.getId())
-                .name(dto.getName())
+                .title(dto.getTitle())
                 .numOfWords(dto.getNumOfWords())
+                .icon(dto.getIcon())
+                .iconWrapClass(dto.getIconWrapClass())
+                .barClass(dto.getBarClass())
                 .build();
     }
 }

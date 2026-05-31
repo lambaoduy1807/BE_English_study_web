@@ -19,9 +19,34 @@ public class V1__InitialSetup {
     @Execution
     public void execution(MongoTemplate mongoTemplate) {
         // 1. Insert Vocab Sets
-        VocabSetEntity vs1 = VocabSetEntity.builder().id("vs1").name("TOEIC 600").numOfWords(3).build();
-        VocabSetEntity vs2 = VocabSetEntity.builder().id("vs2").name("IELTS Basic").numOfWords(2).build();
-        mongoTemplate.insertAll(Arrays.asList(vs1, vs2));
+        VocabSetEntity vs1 = VocabSetEntity.builder()
+                .id("s1")
+                .title("IELTS Level 1")
+                .numOfWords(500)
+                .icon("auto_stories")
+                .iconWrapClass("bg-secondary-container")
+                .barClass("bg-secondary-container")
+                .build();
+
+        VocabSetEntity vs2 = VocabSetEntity.builder()
+                .id("s2")
+                .title("TOEIC 650+")
+                .numOfWords(850)
+                .icon("school")
+                .iconWrapClass("bg-primary")
+                .barClass("bg-primary")
+                .build();
+
+        VocabSetEntity vs3 = VocabSetEntity.builder()
+                .id("s3")
+                .title("Travel Phrases")
+                .numOfWords(200)
+                .icon("travel_explore")
+                .iconWrapClass("bg-tertiary-container")
+                .barClass("bg-tertiary-container")
+                .build();
+
+        mongoTemplate.insertAll(Arrays.asList(vs1, vs2, vs3));
 
         // 2. Insert Users
         UserEntity u1 = UserEntity.builder()

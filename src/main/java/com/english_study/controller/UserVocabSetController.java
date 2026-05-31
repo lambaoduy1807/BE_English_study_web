@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import com.english_study.model.JwtUserPrincipal;
+
 @RestController
 @RequestMapping("/api/user-vocab-sets")
 @AllArgsConstructor
@@ -16,8 +19,12 @@ public class UserVocabSetController {
     private final UserVocabSetService service;
 
     @GetMapping
-    public ResponseEntity<List<UserVocabSetDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<UserVocabSetDTO>> getAll(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof JwtUserPrincipal) {
+            String userId = ((JwtUserPrincipal) authentication.getPrincipal()).getUserId();
+            return ResponseEntity.ok(service.getByUserId(userId));
+        }
+        return ResponseEntity.ok(service.getAll()); // Fallback an toàn
     }
 
     @GetMapping("/{id}")
