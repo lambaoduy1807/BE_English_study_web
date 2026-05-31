@@ -17,16 +17,16 @@ public class HomeController {
 
     private final DashboardService dashboardService;
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<?> getDashboard(org.springframework.security.core.Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body("Unauthorized: Please login.");
-        }
-
-        com.english_study.model.JwtUserPrincipal principal = (com.english_study.model.JwtUserPrincipal) authentication.getPrincipal();
-        String userId = principal.getUserId();
-        DashboardResponseDTO data = dashboardService.getDashboardData(userId);
-        
-        return ResponseEntity.ok(data);
-    }
+//    @GetMapping("/dashboard")
+//    public ResponseEntity<?> getDashboard(org.springframework.security.core.Authentication authentication) {
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            return ResponseEntity.status(401).body("Unauthorized: Please login.");
+//        }
+//
+//        com.english_study.model.JwtUserPrincipal principal = (com.english_study.model.JwtUserPrincipal) authentication.getPrincipal();
+//        String userId = principal.getUserId();
+////        DashboardResponseDTO data = dashboardService.getDashboardData(userId);
+//
+////        return ResponseEntity.ok(data);
+//    }
 }

@@ -38,7 +38,7 @@ public class UserDailyStatService {
             if (stat.getVocabSets() != null && !stat.getVocabSets().isEmpty()) {
                 for (String vocabId : stat.getVocabSets()) {
                     String vocabName = vocabSetRepository.findById(vocabId)
-                            .map(VocabSetEntity::getName)
+                            .map(VocabSetEntity::getTitle)
                             .orElse("Unknown");
 
                     UserVocabSet userVocabSet = userVocabSetRepository.findByUserIDAndVocabID(userId, vocabId);
