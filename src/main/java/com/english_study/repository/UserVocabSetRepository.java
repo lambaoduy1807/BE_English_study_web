@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface UserVocabSetRepository extends MongoRepository<UserVocabSet, String> {
     List<UserVocabSet> findByUserID(String userID);
+    UserVocabSet findByUserIDAndVocabID(String userID, String vocabID);
 }

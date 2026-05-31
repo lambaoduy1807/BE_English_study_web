@@ -21,6 +21,7 @@ public class UserEntity {
 
     @Id
     private String id;
+    //    Thông tin cơ bản
     private String name;
     private String password;
     private String email;
@@ -28,14 +29,12 @@ public class UserEntity {
     private boolean isDelete;
     private String avatar;
     private String roleId;
+    //    dành cho chức năng streak
     private Date beginStreak;
     private Date endStreak;
-    private String level;
+    private String rank;
+    private String level;// B1, B2 ...
     private int totalXP;
-    private int todayXP;
-    private java.util.Date lastXpUpdateDate;
-
-    private List<java.util.Date> checkinHistory; // Lưu lịch sử điểm danh
 
     private String refreshToken;//Token để xác thực và cấp lại accessToken
 
