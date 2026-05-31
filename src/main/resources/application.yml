@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: english-study
+  config:
+    import: optional:file:.env[.properties]
 
   # ===============================
   # MongoDB
@@ -25,7 +27,7 @@ spring:
       enabled: false
       lifecycle-management: start_only
   mongodb:
-    uri: ${MONGO_URI:}
+    uri: ${MONGO_URI:UnLoad}
 
 # ===============================
 # JWT custom config

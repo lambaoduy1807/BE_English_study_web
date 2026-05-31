@@ -32,7 +32,7 @@ public class UserEntity {
     //    dành cho chức năng streak
     private Date beginStreak;
     private Date endStreak;
-
+    private String rank;
     private String level;// B1, B2 ...
     private int totalXP;
 
