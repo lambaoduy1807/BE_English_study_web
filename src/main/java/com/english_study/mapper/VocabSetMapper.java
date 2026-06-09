@@ -15,8 +15,6 @@ public class VocabSetMapper {
                 .title(entity.getTitle())
                 .numOfWords(entity.getNumOfWords())
                 .icon(entity.getIcon())
-                .iconWrapClass(entity.getIconWrapClass())
-                .barClass(entity.getBarClass())
                 .build();
     }
 
@@ -28,8 +26,6 @@ public class VocabSetMapper {
                 .title(dto.getTitle())
                 .numOfWords(dto.getNumOfWords())
                 .icon(dto.getIcon())
-                .iconWrapClass(dto.getIconWrapClass())
-                .barClass(dto.getBarClass())
                 .build();
     }
 }

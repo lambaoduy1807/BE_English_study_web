@@ -14,7 +14,5 @@ public class VocabSetDTO {
     private String title;
     private int numOfWords;
     private String icon;
-    private String iconWrapClass;
-    private String barClass;
     private int categoryID;
 }

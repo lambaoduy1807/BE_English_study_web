@@ -20,30 +20,24 @@ public class V1__InitialSetup {
     public void execution(MongoTemplate mongoTemplate) {
         // 1. Insert Vocab Sets
         VocabSetEntity vs1 = VocabSetEntity.builder()
-                .id("s1")
+                .id("vs1")
                 .title("IELTS Level 1")
                 .numOfWords(500)
                 .icon("auto_stories")
-                .iconWrapClass("bg-secondary-container")
-                .barClass("bg-secondary-container")
                 .build();
 
         VocabSetEntity vs2 = VocabSetEntity.builder()
-                .id("s2")
+                .id("vs2")
                 .title("TOEIC 650+")
                 .numOfWords(850)
                 .icon("school")
-                .iconWrapClass("bg-primary")
-                .barClass("bg-primary")
                 .build();
 
         VocabSetEntity vs3 = VocabSetEntity.builder()
-                .id("s3")
+                .id("vs3")
                 .title("Travel Phrases")
                 .numOfWords(200)
                 .icon("travel_explore")
-                .iconWrapClass("bg-tertiary-container")
-                .barClass("bg-tertiary-container")
                 .build();
 
         mongoTemplate.insertAll(Arrays.asList(vs1, vs2, vs3));
@@ -83,7 +77,10 @@ public class V1__InitialSetup {
         Word w3 = Word.builder().id("w3").word("Candidate").mean("Ứng cử viên").type("Noun").example("She is the best candidate for the job.").vocabID("vs1").build();
         Word w4 = Word.builder().id("w4").word("Analyze").mean("Phân tích").type("Verb").example("We need to analyze the data.").vocabID("vs2").build();
         Word w5 = Word.builder().id("w5").word("Assume").mean("Giả sử").type("Verb").example("I assume you are right.").vocabID("vs2").build();
-        mongoTemplate.insertAll(Arrays.asList(w1, w2, w3, w4, w5));
+        Word w6 = Word.builder().id("w6").word("Airport").mean("Sân bay").type("Noun").example("We arrived at the airport early.").vocabID("vs3").build();
+        Word w7 = Word.builder().id("w7").word("Luggage").mean("Hành lý").type("Noun").example("Do not leave your luggage unattended.").vocabID("vs3").build();
+        Word w8 = Word.builder().id("w8").word("Passport").mean("Hộ chiếu").type("Noun").example("Show your passport at the counter.").vocabID("vs3").build();
+        mongoTemplate.insertAll(Arrays.asList(w1, w2, w3, w4, w5, w6, w7, w8));
 
         // 4. Insert UserVocabSet (progress)
         UserVocabSet uvs1 = UserVocabSet.builder()

@@ -19,7 +19,6 @@ public class UserVideoProgress {
     private String id;
     private String userId;
     private String videoId;
-    
     private int resumeAt; // Tính bằng giây (đang xem dở ở giây thứ mấy)
     private Date lastWatched; // Thời gian xem gần nhất
 }
