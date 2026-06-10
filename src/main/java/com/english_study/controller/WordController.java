@@ -16,7 +16,10 @@ public class WordController {
     private final WordService service;
 
     @GetMapping
-    public ResponseEntity<List<WordDTO>> getAll() {
+    public ResponseEntity<List<WordDTO>> getAll(@RequestParam(required = false) String setId) {
+        if (setId != null && !setId.isEmpty()) {
+            return ResponseEntity.ok(service.getByVocabId(setId));
+        }
         return ResponseEntity.ok(service.getAll());
     }
 

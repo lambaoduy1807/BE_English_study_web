@@ -4,6 +4,7 @@ import com.english_study.mapper.UserVocabSetMapper;
 import com.english_study.model.dto.UserVocabSetDTO;
 import com.english_study.model.entity.UserVocabSet;
 import com.english_study.repository.UserVocabSetRepository;
+import com.english_study.repository.VocabSetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserVocabSetService {
 
     private final UserVocabSetRepository repository;
+    private final VocabSetRepository vocabSetRepository;
     private final UserVocabSetMapper mapper;
 
     public List<UserVocabSetDTO> getAll() {
@@ -24,9 +26,24 @@ public class UserVocabSetService {
     }
 
     public List<UserVocabSetDTO> getByUserId(String userId) {
-        return repository.findByUserID(userId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<UserVocabSet> userDecks = repository.findByUserID(userId);
+
+        return userDecks.stream().map(deck -> {
+            UserVocabSetDTO dto = new UserVocabSetDTO();
+            dto.setId(deck.getId());
+            dto.setUserID(deck.getUserID());
+            dto.setVocabID(deck.getVocabID());
+            dto.setLearningProgress(deck.getLearningProgress());
+            dto.setMemoryWords(deck.getMemoryWords());
+
+            vocabSetRepository.findById(deck.getVocabID()).ifPresent(vocab -> {
+                dto.setTitle(vocab.getTitle());
+                dto.setIcon(vocab.getIcon());
+                dto.setNumOfWords(vocab.getNumOfWords());
+            });
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public UserVocabSetDTO getById(String id) {

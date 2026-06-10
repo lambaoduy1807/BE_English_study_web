@@ -23,6 +23,12 @@ public class WordService {
                 .collect(Collectors.toList());
     }
 
+    public List<WordDTO> getByVocabId(String vocabID) {
+        return repository.findByVocabID(vocabID).stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public WordDTO getById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)

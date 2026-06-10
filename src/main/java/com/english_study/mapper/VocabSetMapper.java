@@ -15,6 +15,7 @@ public class VocabSetMapper {
                 .title(entity.getTitle())
                 .numOfWords(entity.getNumOfWords())
                 .icon(entity.getIcon())
+                .categoryID(entity.getCategoryID())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class VocabSetMapper {
                 .title(dto.getTitle())
                 .numOfWords(dto.getNumOfWords())
                 .icon(dto.getIcon())
+                .categoryID(dto.getCategoryID())
                 .build();
     }
 }

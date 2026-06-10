@@ -14,5 +14,6 @@ public class VocabSetDTO {
     private String title;
     private int numOfWords;
     private String icon;
+    @com.fasterxml.jackson.annotation.JsonProperty("categoryID")
     private int categoryID;
 }
