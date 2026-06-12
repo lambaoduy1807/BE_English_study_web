@@ -21,6 +21,7 @@ public class UserVocabSet {
     private String vocabID;
     private int learningProgress;
     private List<String> memoryWords;
+    private List<String> clozeWords;
 
     private int numMemorizeNew;
     private int xpNew;

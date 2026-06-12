@@ -114,4 +114,10 @@ public class UserService {
                 .rank(user.getRank())
                 .build();
     }
+
+    public UserDTO addXP(String userID, int xp) {
+        UserEntity user = userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setTotalXP(user.getTotalXP() + xp);
+        return userMapper.toUserDTO(userRepository.save(user));
+    }
 }

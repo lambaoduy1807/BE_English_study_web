@@ -17,6 +17,7 @@ public class UserVocabSetDTO {
     private String vocabID;
     private int learningProgress;
     private List<String> memoryWords;
+    private List<String> clozeWords;
     private String title;
     private int numOfWords;
     private String icon;

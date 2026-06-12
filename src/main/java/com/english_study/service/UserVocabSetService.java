@@ -69,4 +69,37 @@ public class UserVocabSetService {
     public void delete(String id) {
         repository.deleteById(id);
     }
+
+    public UserVocabSetDTO recordStudySession(String userId, String vocabId, int newWords, int xpGained, int progress, List<String> memoryWords, List<String> clozeWords) {
+        UserVocabSet userVocabSet = repository.findByUserIDAndVocabID(userId, vocabId);
+        if (userVocabSet == null) {
+            userVocabSet = UserVocabSet.builder()
+                    .userID(userId)
+                    .vocabID(vocabId)
+                    .learningProgress(0)
+                    .numMemorizeNew(0)
+                    .xpNew(0)
+                    .memoryWords(new java.util.ArrayList<>())
+                    .clozeWords(new java.util.ArrayList<>())
+                    .build();
+        }
+
+        if (progress > userVocabSet.getLearningProgress()) {
+            userVocabSet.setLearningProgress(progress);
+        }
+
+        if (memoryWords != null) {
+            userVocabSet.setMemoryWords(memoryWords);
+        }
+
+        if (clozeWords != null) {
+            userVocabSet.setClozeWords(clozeWords);
+        }
+
+        userVocabSet.setNumMemorizeNew(userVocabSet.getNumMemorizeNew() + newWords);
+        userVocabSet.setXpNew(userVocabSet.getXpNew() + xpGained);
+        userVocabSet.setUpdatedAt(java.time.LocalDateTime.now());
+        
+        return mapper.toDTO(repository.save(userVocabSet));
+    }
 }

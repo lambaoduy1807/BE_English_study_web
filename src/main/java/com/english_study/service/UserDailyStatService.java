@@ -98,4 +98,29 @@ public class UserDailyStatService {
 
         return weeklyStats;
     }
+
+    public void recordDailyStat(String userId, String vocabId, int newWords, int xpGained) {
+        LocalDate today = LocalDate.now();
+        UserDailyStat dailyStat = userDailyStatRepository.findByUserIdAndDate(userId, today)
+                .orElse(UserDailyStat.builder()
+                        .userId(userId)
+                        .date(today)
+                        .numMemorizeNew(0)
+                        .xpNew(0)
+                        .vocabSets(new ArrayList<>())
+                        .build());
+
+        dailyStat.setNumMemorizeNew(dailyStat.getNumMemorizeNew() + newWords);
+        dailyStat.setXpNew(dailyStat.getXpNew() + xpGained);
+        dailyStat.setUpdatedAt(LocalDateTime.now());
+
+        if (dailyStat.getVocabSets() == null) {
+            dailyStat.setVocabSets(new ArrayList<>());
+        }
+        if (!dailyStat.getVocabSets().contains(vocabId)) {
+            dailyStat.getVocabSets().add(vocabId);
+        }
+
+        userDailyStatRepository.save(dailyStat);
+    }
 }

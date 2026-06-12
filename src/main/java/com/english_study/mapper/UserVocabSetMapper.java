@@ -16,6 +16,7 @@ public class UserVocabSetMapper {
                 .vocabID(entity.getVocabID())
                 .learningProgress(entity.getLearningProgress())
                 .memoryWords(entity.getMemoryWords())
+                .clozeWords(entity.getClozeWords())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class UserVocabSetMapper {
                 .vocabID(dto.getVocabID())
                 .learningProgress(dto.getLearningProgress())
                 .memoryWords(dto.getMemoryWords())
+                .clozeWords(dto.getClozeWords())
                 .build();
     }
 }
