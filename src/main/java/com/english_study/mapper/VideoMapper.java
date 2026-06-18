@@ -16,6 +16,7 @@ public class VideoMapper {
                 .url(entity.getUrl())
                 .upload_date(entity.getUpload_date())
                 .viewCount(entity.getViewCount())
+                .duration(entity.getDuration())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class VideoMapper {
                 .url(dto.getUrl())
                 .upload_date(dto.getUpload_date())
                 .viewCount(dto.getViewCount())
+                .duration(dto.getDuration())
                 .build();
     }
 }

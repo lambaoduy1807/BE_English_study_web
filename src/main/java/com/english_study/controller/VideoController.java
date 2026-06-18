@@ -1,6 +1,7 @@
 package com.english_study.controller;
 
 import com.english_study.model.dto.VideoDTO;
+import com.english_study.service.TranscriptService;
 import com.english_study.service.VideoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 public class VideoController {
 
     private final VideoService service;
+    private final TranscriptService transcriptService;
 
     @GetMapping
     public ResponseEntity<List<VideoDTO>> getAll() {
@@ -47,5 +49,10 @@ public class VideoController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/transcript/{videoid}")
+    public ResponseEntity<String> getTranscript(@PathVariable String videoid) {
+        String transcript=transcriptService.getTranscriptContent(videoid);
+        return ResponseEntity.ok(transcript);
     }
 }
