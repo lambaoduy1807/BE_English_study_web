@@ -21,4 +21,5 @@ public class Video {
     private String url;
     private Date upload_date;
     private long viewCount;
+    private long duration;
 }

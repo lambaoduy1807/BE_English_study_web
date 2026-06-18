@@ -17,4 +17,5 @@ public class VideoDTO {
     private String url;
     private Date upload_date;
     private long viewCount;
+    private long duration;
 }
