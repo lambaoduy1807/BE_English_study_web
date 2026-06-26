@@ -42,7 +42,25 @@ public class UserService {
             throw new UserNotFoundException("Sai tên đăng nhập hoặc mật khẩu");
         }
 
+        if (user.isDelete()) {
+            throw new RuntimeException("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.");
+        }
+
         return userMapper.toUserDTO(user);
+    }
+
+    public UserDTO updateUserRole(String userId, String roleId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setRoleId(roleId);
+        return userMapper.toUserDTO(userRepository.save(user));
+    }
+
+    public UserDTO toggleUserBlock(String userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setDelete(!user.isDelete()); // toggle block state
+        return userMapper.toUserDTO(userRepository.save(user));
     }
 
     @Transactional
@@ -119,5 +137,12 @@ public class UserService {
         UserEntity user = userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setTotalXP(user.getTotalXP() + xp);
         return userMapper.toUserDTO(userRepository.save(user));
+    }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toUserDTO)
+                .toList();
     }
 }
