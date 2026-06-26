@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 "/api/words/**",
                                 "/api/categories"
                                 ).permitAll()
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
