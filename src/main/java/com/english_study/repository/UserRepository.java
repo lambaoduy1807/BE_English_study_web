@@ -9,8 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends MongoRepository<UserEntity, String> {
     UserEntity findByName(String userName);
-
     boolean existsByName(String name);
+
+    UserEntity findByEmail(String email);
+    boolean existsByEmail(String email);
+
+    UserEntity findByVerificationToken(String token);
+    UserEntity findByResetPasswordToken(String token);
     @Query("{ '_id' : ?0 }")
     @Update("{ '$set' : { 'refreshToken' : ?1 } }")
     void updateRefreshtoken(String id, String refreshToken);

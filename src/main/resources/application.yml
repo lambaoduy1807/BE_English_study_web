@@ -7,9 +7,16 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
-  # ===============================
-  # MongoDB
-  # ===============================
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+
   # ===============================
   # Security (Resource Server - JWT)
   # ===============================

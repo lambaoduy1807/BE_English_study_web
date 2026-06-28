@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,6 +39,12 @@ public class UserEntity {
     private String refreshToken;//Token để xác thực và cấp lại accessToken
 
     private List<String> my_vocabs;// danh sách id của các bộ từ vựng
+
+    private String authProvider = "LOCAL"; // LOCAL, GOOGLE, FACEBOOK
+    private boolean isEmailVerified = false;
+    private String verificationToken;
+    private String resetPasswordToken;
+    private Date resetPasswordTokenExpiryDate;
 
     public UserEntity(String username, String email, String password, String fullName, String roleId) {
         this.name = username;

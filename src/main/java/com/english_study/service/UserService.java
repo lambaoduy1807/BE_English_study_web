@@ -38,8 +38,16 @@ public class UserService {
     public UserDTO checkUser(String username, String password) {
         UserEntity user = userRepository.findByName(username);
 
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null || (user.getPassword() != null && !passwordEncoder.matches(password, user.getPassword()))) {
             throw new UserNotFoundException("Sai tên đăng nhập hoặc mật khẩu");
+        }
+
+        if ("GOOGLE".equals(user.getAuthProvider()) && user.getPassword() == null) {
+            throw new RuntimeException("Tài khoản này được đăng ký qua Google, vui lòng đăng nhập bằng Google.");
+        }
+
+        if (!user.isEmailVerified() && "LOCAL".equals(user.getAuthProvider())) {
+            throw new RuntimeException("Vui lòng kiểm tra email để xác thực tài khoản trước khi đăng nhập.");
         }
 
         if (user.isDelete()) {
@@ -69,12 +77,38 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO create(String email, String fullName, String name, String password, String role) {
-        if (userRepository.existsByName(name)) {
+    public UserDTO create(String email, String fullName, String name, String password, String role, String verificationToken) {
+        String normalizedEmail = email != null ? email.trim().toLowerCase() : null;
+        String normalizedName = name != null ? name.trim().toLowerCase() : null;
+
+        if (userRepository.existsByName(normalizedName)) {
             throw new UserAlreadyExistsException("Tên đăng nhập đã tồn tại!");
         }
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new UserAlreadyExistsException("Email đã được sử dụng!");
+        }
 
-        UserEntity user = new UserEntity(name, email, passwordEncoder.encode(password), fullName, role);
+        UserEntity user = new UserEntity(normalizedName, normalizedEmail, passwordEncoder.encode(password), fullName, role);
+        user.setVerificationToken(verificationToken);
+        user.setAuthProvider("LOCAL");
+        user.setEmailVerified(false);
+        user = userRepository.save(user);
+        return userMapper.toUserDTO(user);
+    }
+
+    @Transactional
+    public UserDTO createGoogleUser(String email, String fullName, String avatar) {
+        if (userRepository.existsByEmail(email)) {
+            throw new UserAlreadyExistsException("Email đã được sử dụng!");
+        }
+        
+        // Tạo username từ email (bỏ phần @...)
+        String username = email.split("@")[0] + "_" + System.currentTimeMillis();
+
+        UserEntity user = new UserEntity(username, email, null, fullName, com.english_study.model.role.Role.USER.getAuthority());
+        user.setAvatar(avatar);
+        user.setAuthProvider("GOOGLE");
+        user.setEmailVerified(true);
         user = userRepository.save(user);
         return userMapper.toUserDTO(user);
     }

@@ -33,9 +33,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/login",
-                                "/auth/register",
-                                "/auth/refresh",
+                                "/auth/**",
                                 "/api/videos",
                                 "/api/videos/**",
                                 "/api/vocab-sets",

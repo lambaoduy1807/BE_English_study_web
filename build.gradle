@@ -60,9 +60,11 @@ dependencies {
     // Mongock (MongoDB Migrations)
     implementation 'io.mongock:mongock-springboot-v3'
     implementation 'io.mongock:mongodb-springdata-v4-driver'
-//     Cloudỉay
+    // Cloudinary
     implementation 'com.cloudinary:cloudinary-http44:1.39.0'
     implementation 'io.github.thoroldvix:youtube-transcript-api:0.4.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.google.api-client:google-api-client:2.2.0'
 }
 
 dependencyManagement {

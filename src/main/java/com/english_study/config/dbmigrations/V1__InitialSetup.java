@@ -10,7 +10,6 @@ import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.sql.Date;
 import java.util.Arrays;
 
 @ChangeUnit(id = "init-db", order = "001", author = "Duy")
@@ -100,8 +99,8 @@ public class V1__InitialSetup {
         mongoTemplate.insertAll(Arrays.asList(uvs1, uvs2));
 
         // 5. Insert Videos
-        Video v1 = Video.builder().id("v1").title("Learn English in 30 Minutes").url("https://youtube.com/watch?v=123").upload_date(Date.valueOf("2023-10-01")).viewCount(15000).build();
-        Video v2 = Video.builder().id("v2").title("Basic English Conversation").url("https://youtube.com/watch?v=456").upload_date(Date.valueOf("2023-10-05")).viewCount(23000).build();
+        Video v1 = Video.builder().id("v1").title("Learn English in 30 Minutes").url("https://youtube.com/watch?v=123").upload_date(java.util.Date.from(java.time.Instant.parse("2023-10-01T00:00:00Z"))).viewCount(15000).build();
+        Video v2 = Video.builder().id("v2").title("Basic English Conversation").url("https://youtube.com/watch?v=456").upload_date(java.util.Date.from(java.time.Instant.parse("2023-10-05T00:00:00Z"))).viewCount(23000).build();
         mongoTemplate.insertAll(Arrays.asList(v1, v2));
     }
 

@@ -11,61 +11,44 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalException {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ApiResponse<?> handleResourceNotFound(ResourceNotFoundException ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException ex) {
         log.error(ex.getMessage(), ex);
-        return ApiResponse.error(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage()
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }
+    
     @ExceptionHandler(UserNotFoundException.class)
-    public ApiResponse<?> handleUserNotFound(UserNotFoundException ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleUserNotFound(UserNotFoundException ex) {
         log.error("USER_NOT_FOUND: {}", ex.getMessage(), ex);
-
-        return ApiResponse.error(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage()
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ApiResponse<?> handleUserExists(UserAlreadyExistsException ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleUserExists(UserAlreadyExistsException ex) {
         log.error("USER_ALREADY_EXISTS: {}", ex.getMessage(), ex);
-
-        return ApiResponse.error(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage()
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidCredentialException.class)
-    public ApiResponse<?> handleInvalidCredential(InvalidCredentialException ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleInvalidCredential(InvalidCredentialException ex) {
         log.error("INVALID_CREDENTIAL: {}", ex.getMessage(), ex);
-
-        return ApiResponse.error(
-                HttpStatus.UNAUTHORIZED.value(),
-                ex.getMessage()
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
     }
 
-
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
         log.error("BAD_REQUEST: {}", ex.getMessage(), ex);
-
-        return ApiResponse.error(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage()
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ApiResponse<?> handleException(Exception ex) {
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleException(Exception ex) {
         log.error("UNEXPECTED_ERROR: {}", ex.getMessage(), ex);
-
-        return ApiResponse.error(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Something went wrong"
-        );
+        return org.springframework.http.ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Something went wrong"));
     }
 }

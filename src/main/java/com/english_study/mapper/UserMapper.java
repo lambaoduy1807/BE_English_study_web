@@ -23,6 +23,8 @@ public class UserMapper {
                 .totalXP(entity.getTotalXP())
                 .refreshToken(entity.getRefreshToken())
                 .my_vocabs(entity.getMy_vocabs())
+                .authProvider(entity.getAuthProvider())
+                .isEmailVerified(entity.isEmailVerified())
                 .build();
     }
 
@@ -43,6 +45,8 @@ public class UserMapper {
                 .totalXP(dto.getTotalXP())
                 .refreshToken(dto.getRefreshToken())
                 .my_vocabs(dto.getMy_vocabs())
+                .authProvider(dto.getAuthProvider())
+                .isEmailVerified(dto.isEmailVerified())
                 .build();
     }
 }
