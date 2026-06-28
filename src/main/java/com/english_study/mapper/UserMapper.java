@@ -12,7 +12,7 @@ public class UserMapper {
 
         return UserDTO.builder()
                 .id(entity.getId())
-                .name(entity.getName())
+                .name(entity.getUsername())
                 .email(entity.getEmail()).fullName(entity.getFullName())
                 .isDelete(entity.isDelete())
                 .avatar(entity.getAvatar())
@@ -22,7 +22,7 @@ public class UserMapper {
                 .level(entity.getLevel())
                 .totalXP(entity.getTotalXP())
                 .refreshToken(entity.getRefreshToken())
-                .my_vocabs(entity.getMy_vocabs())
+                .my_vocabs(entity.getMyVocabs())
                 .authProvider(entity.getAuthProvider())
                 .isEmailVerified(entity.isEmailVerified())
                 .build();
@@ -33,7 +33,7 @@ public class UserMapper {
 
         return UserEntity.builder()
                 .id(dto.getId())
-                .name(dto.getName())
+                .username(dto.getName())
                 .email(dto.getEmail())
                 .fullName(dto.getFullName())
                 .isDelete(dto.isDelete())
@@ -44,7 +44,7 @@ public class UserMapper {
                 .level(dto.getLevel())
                 .totalXP(dto.getTotalXP())
                 .refreshToken(dto.getRefreshToken())
-                .my_vocabs(dto.getMy_vocabs())
+                .myVocabs(dto.getMy_vocabs())
                 .authProvider(dto.getAuthProvider())
                 .isEmailVerified(dto.isEmailVerified())
                 .build();

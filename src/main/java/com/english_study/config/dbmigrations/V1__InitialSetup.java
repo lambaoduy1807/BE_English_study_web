@@ -44,7 +44,7 @@ public class V1__InitialSetup {
         // 2. Insert Users
         UserEntity u1 = UserEntity.builder()
                 .id("u1")
-                .name("nguyenvana")
+                .username("nguyenvana")
                 .password("$2a$10$abcdefghijklmnopqrstuv") // dummy hash
                 .email("vana@gmail.com")
                 .fullName("Nguyen Van A")
@@ -53,12 +53,12 @@ public class V1__InitialSetup {
                 .roleId("USER")
                 .level("B1")
                 .totalXP(100)
-                .my_vocabs(Arrays.asList("vs1", "vs2"))
+                .myVocabs(Arrays.asList("vs1", "vs2"))
                 .build();
         
         UserEntity u2 = UserEntity.builder()
                 .id("u2")
-                .name("admin")
+                .username("admin")
                 .password("$2a$10$xyzabcdefghijklmnopqrs") // dummy hash
                 .email("admin@gmail.com")
                 .fullName("System Admin")

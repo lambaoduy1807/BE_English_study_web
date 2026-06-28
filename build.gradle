@@ -65,6 +65,8 @@ dependencies {
     implementation 'io.github.thoroldvix:youtube-transcript-api:0.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'com.google.api-client:google-api-client:2.2.0'
+    // Apache POI for Excel
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
 }
 
 dependencyManagement {

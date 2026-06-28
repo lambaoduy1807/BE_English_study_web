@@ -7,7 +7,6 @@ import com.english_study.mapper.UserMapper;
 import com.english_study.model.dto.UserDTO;
 import com.english_study.model.entity.UserEntity;
 import com.english_study.model.request.UpdateProfileRequest;
-import com.english_study.model.response.ApiResponse;
 import com.english_study.repository.UserRepository;
 import com.english_study.repository.UserDailyStatRepository;
 import com.english_study.model.entity.UserDailyStat;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class UserService {
     private final UserDailyStatRepository userDailyStatRepository;
 
     public UserDTO checkUser(String username, String password) {
-        UserEntity user = userRepository.findByName(username);
+        UserEntity user = userRepository.findByUsername(username);
 
         if (user == null || (user.getPassword() != null && !passwordEncoder.matches(password, user.getPassword()))) {
             throw new UserNotFoundException("Sai tên đăng nhập hoặc mật khẩu");
@@ -81,7 +79,7 @@ public class UserService {
         String normalizedEmail = email != null ? email.trim().toLowerCase() : null;
         String normalizedName = name != null ? name.trim().toLowerCase() : null;
 
-        if (userRepository.existsByName(normalizedName)) {
+        if (userRepository.existsByUsername(normalizedName)) {
             throw new UserAlreadyExistsException("Tên đăng nhập đã tồn tại!");
         }
         if (userRepository.existsByEmail(normalizedEmail)) {
