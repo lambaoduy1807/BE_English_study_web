@@ -3,49 +3,49 @@ package com.english_study.controller;
 import com.english_study.model.dto.VocabSetDTO;
 import com.english_study.service.VocabSetService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.english_study.model.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/vocab-sets")
+@RequestMapping("/api/vocab-set")
 @AllArgsConstructor
 public class VocabSetController {
 
     private final VocabSetService service;
 
-    @GetMapping
-    public ResponseEntity<List<VocabSetDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    @GetMapping("/get-all")
+    public ApiResponse getAll() {
+        return ApiResponse.success(service.getAll(), "Lấy danh sách bộ từ vựng thành công");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VocabSetDTO> getById(@PathVariable String id) {
+    @GetMapping("/get/{id}")
+    public ApiResponse getById(@PathVariable String id) {
         VocabSetDTO dto = service.getById(id);
         if (dto == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy bộ từ vựng");
         }
-        return ResponseEntity.ok(dto);
+        return ApiResponse.success(dto, "Lấy chi tiết bộ từ vựng thành công");
     }
 
-    @PostMapping
-    public ResponseEntity<VocabSetDTO> create(@RequestBody VocabSetDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
+    @PostMapping("/create")
+    public ApiResponse create(@RequestBody VocabSetDTO dto) {
+        return ApiResponse.success(service.create(dto), "Tạo bộ từ vựng thành công");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VocabSetDTO> update(@PathVariable String id, @RequestBody VocabSetDTO dto) {
+    @PutMapping("/update/{id}")
+    public ApiResponse update(@PathVariable String id, @RequestBody VocabSetDTO dto) {
         VocabSetDTO updated = service.update(id, dto);
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy bộ từ vựng để cập nhật");
         }
-        return ResponseEntity.ok(updated);
+        return ApiResponse.success(updated, "Cập nhật bộ từ vựng thành công");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(null, "Xóa bộ từ vựng thành công");
     }
 }

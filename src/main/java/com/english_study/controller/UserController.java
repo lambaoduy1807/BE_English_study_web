@@ -29,13 +29,13 @@ public class UserController {
     UserStreakService userStreakService;
     UserDailyStatService userDailyStatService;
 
-    @PutMapping
+    @PutMapping("/update-profile")
     public ApiResponse update(@RequestBody UpdateProfileRequest updateRequest) {
         String userID=SecurityUtil.getCurrentUserId();
-        return ApiResponse.success( userService.updateUser(userID,updateRequest),"update success");
+        return ApiResponse.success( userService.updateUser(userID,updateRequest),"Cập nhật thông tin thành công");
     }
 
-    @PostMapping("/img")
+    @PostMapping("/update-image")
     public ApiResponse updateImage(@RequestParam("image") MultipartFile image) throws IOException {
         String userID = SecurityUtil.getCurrentUserId();
         
@@ -47,39 +47,39 @@ public class UserController {
         return ApiResponse.success(url, "Cập nhật ảnh đại diện thành công");
     }
 
-    @GetMapping("/stats")
+    @GetMapping("/get-stats")
     public ApiResponse getStats() {
         String userID = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(userService.getUserStats(userID), "Lấy thông tin thống kê thành công");
     }
 
     // -- User Streak APIs --
-    @GetMapping("/streak")
+    @GetMapping("/get-streak")
     public ApiResponse getStreak() {
         String userId = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(userStreakService.getUserStreak(userId), "Lấy thông tin streak thành công");
     }
 
-    @PostMapping("/streak/increase")
+    @PostMapping("/increase-streak")
     public ApiResponse increaseStreak() {
         String userId = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(userStreakService.increaseStreak(userId), "Tăng streak thành công");
     }
 
-    @PostMapping("/streak/reset")
+    @PostMapping("/reset-streak")
     public ApiResponse resetStreak() {
         String userId = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(userStreakService.resetCurrentStreak(userId), "Reset streak thành công");
     }
 
-    @PostMapping("/streak/record")
+    @PostMapping("/record-study-day")
     public ApiResponse recordStudyDay(@RequestParam(defaultValue = "0") int newWordsMemorized) {
         String userId = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(userStreakService.recordStudyDay(userId, newWordsMemorized), "Ghi nhận ngày học thành công");
     }
 
     // -- User Daily Stat APIs --
-    @GetMapping("/history")
+    @GetMapping("/get-history")
     public ApiResponse getRecentStudyHistory(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -93,7 +93,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/weekly")
+    @GetMapping("/get-weekly-stats")
     public ApiResponse getWeeklyNewWords() {
         String userId = SecurityUtil.getCurrentUserId();
         return ApiResponse.success(

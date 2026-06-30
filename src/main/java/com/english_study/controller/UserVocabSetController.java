@@ -3,11 +3,6 @@ package com.english_study.controller;
 import com.english_study.model.dto.UserVocabSetDTO;
 import com.english_study.service.UserVocabSetService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import com.english_study.model.JwtUserPrincipal;
 
@@ -17,9 +12,12 @@ import com.english_study.sercurity.SecurityUtil;
 import com.english_study.service.UserDailyStatService;
 import com.english_study.service.UserService;
 import com.english_study.service.UserStreakService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/user-vocab-sets")
+@RequestMapping("/api/user-vocab-set")
 @AllArgsConstructor
 public class UserVocabSetController {
 
@@ -52,42 +50,42 @@ public class UserVocabSetController {
         return ApiResponse.success(updatedSet, "Ghi nhận phiên học thành công");
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserVocabSetDTO>> getAll(Authentication authentication) {
+    @GetMapping("/get-all")
+    public ApiResponse getAll(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof JwtUserPrincipal) {
             String userId = ((JwtUserPrincipal) authentication.getPrincipal()).getUserId();
-            return ResponseEntity.ok(service.getByUserId(userId));
+            return ApiResponse.success(service.getByUserId(userId), "Lấy danh sách bộ từ của người dùng thành công");
         }
-        return ResponseEntity.ok(service.getAll()); // Fallback an toàn
+        return ApiResponse.success(service.getAll(), "Lấy danh sách bộ từ thành công");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserVocabSetDTO> getById(@PathVariable String id) {
+    @GetMapping("/get/{id}")
+    public ApiResponse getById(@PathVariable String id) {
         UserVocabSetDTO dto = service.getById(id);
         if (dto == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy bộ từ vựng của người dùng");
         }
-        return ResponseEntity.ok(dto);
+        return ApiResponse.success(dto, "Lấy chi tiết thành công");
     }
 
-    @PostMapping
-    public ResponseEntity<UserVocabSetDTO> create(@RequestBody UserVocabSetDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
+    @PostMapping("/create")
+    public ApiResponse create(@RequestBody UserVocabSetDTO dto) {
+        return ApiResponse.success(service.create(dto), "Tạo mới thành công");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserVocabSetDTO> update(@PathVariable String id, @RequestBody UserVocabSetDTO dto) {
+    @PutMapping("/update/{id}")
+    public ApiResponse update(@PathVariable String id, @RequestBody UserVocabSetDTO dto) {
         UserVocabSetDTO updated = service.update(id, dto);
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy bộ từ vựng để cập nhật");
         }
-        return ResponseEntity.ok(updated);
+        return ApiResponse.success(updated, "Cập nhật thành công");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(null, "Xóa thành công");
     }
 
 }

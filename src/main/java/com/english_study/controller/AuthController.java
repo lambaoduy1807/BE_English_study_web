@@ -12,49 +12,49 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @AllArgsConstructor
 @Validated
 public class AuthController {
     
     private final AuthService authService;
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ApiResponse login(@RequestBody LoginRequest loginRequest) {
         return ApiResponse.success(authService.login(loginRequest), "Login successful");
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ApiResponse register(@RequestBody RegisterRequest registerRequest) {
         return ApiResponse.success(authService.register(registerRequest), "Register successful");
     }
 
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public ApiResponse refresh(@RequestBody RefreshTokenRequest refreshToken) {
         return ApiResponse.success(authService.refreshToken(refreshToken.refreshToken()), "Renew access token success");
     }
 
-    @GetMapping("verify-email")
+    @GetMapping("/verify-email")
     public ApiResponse verifyEmail(@RequestParam String token) {
         authService.verifyEmail(token);
         return ApiResponse.success(null, "Email verified successfully");
     }
 
-    @PostMapping("resend-verification")
+    @PostMapping("/resend-verification")
     public ApiResponse resendVerification(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         authService.resendVerificationEmail(email);
         return ApiResponse.success(null, "Verification email resent successfully");
     }
 
-    @PostMapping("forgot-password")
+    @PostMapping("/forgot-password")
     public ApiResponse forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         authService.forgotPassword(email);
         return ApiResponse.success(null, "Password reset email sent successfully");
     }
 
-    @PostMapping("reset-password")
+    @PostMapping("/reset-password")
     public ApiResponse resetPassword(@RequestBody Map<String, String> request) {
         String token = request.get("token");
         String newPassword = request.get("newPassword");
@@ -62,7 +62,7 @@ public class AuthController {
         return ApiResponse.success(null, "Password reset successfully");
     }
 
-    @PostMapping("google")
+    @PostMapping("/google")
     public ApiResponse googleLogin(@RequestBody Map<String, String> request) {
         String idToken = request.get("idToken");
         return ApiResponse.success(authService.googleLogin(idToken), "Google login successful");
