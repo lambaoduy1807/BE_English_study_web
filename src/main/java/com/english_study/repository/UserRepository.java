@@ -19,4 +19,6 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
     @Query("{ '_id' : ?0 }")
     @Update("{ '$set' : { 'refreshToken' : ?1 } }")
     void updateRefreshtoken(String id, String refreshToken);
+    
+    java.util.List<UserEntity> findByRoleId(String roleId);
 }
