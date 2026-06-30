@@ -22,6 +22,7 @@ public class NotificationLogEntity {
     private String message;
     private String targetType; // ALL, ADMIN, USER, SPECIFIC
     private String targetUserId;
+    private String createdBy;
     
     @Builder.Default
     private Date createdAt = new Date();

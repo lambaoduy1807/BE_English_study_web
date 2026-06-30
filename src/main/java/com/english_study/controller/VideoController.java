@@ -4,55 +4,56 @@ import com.english_study.model.dto.VideoDTO;
 import com.english_study.service.TranscriptService;
 import com.english_study.service.VideoService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.english_study.model.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/api/video")
 @AllArgsConstructor
 public class VideoController {
 
     private final VideoService service;
     private final TranscriptService transcriptService;
 
-    @GetMapping
-    public ResponseEntity<List<VideoDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    @GetMapping("/get-all")
+    public ApiResponse getAll() {
+        return ApiResponse.success(service.getAll(), "Lấy danh sách video thành công");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VideoDTO> getById(@PathVariable String id) {
+    @GetMapping("/get/{id}")
+    public ApiResponse getById(@PathVariable String id) {
         VideoDTO dto = service.getById(id);
         if (dto == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy video");
         }
-        return ResponseEntity.ok(dto);
+        return ApiResponse.success(dto, "Lấy chi tiết video thành công");
     }
 
-    @PostMapping
-    public ResponseEntity<VideoDTO> create(@RequestBody VideoDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
+    @PostMapping("/create")
+    public ApiResponse create(@RequestBody VideoDTO dto) {
+        return ApiResponse.success(service.create(dto), "Tạo video thành công");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VideoDTO> update(@PathVariable String id, @RequestBody VideoDTO dto) {
+    @PutMapping("/update/{id}")
+    public ApiResponse update(@PathVariable String id, @RequestBody VideoDTO dto) {
         VideoDTO updated = service.update(id, dto);
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            return ApiResponse.error(404, "Không tìm thấy video để cập nhật");
         }
-        return ResponseEntity.ok(updated);
+        return ApiResponse.success(updated, "Cập nhật video thành công");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success(null, "Xóa video thành công");
     }
-    @GetMapping("/transcript/{videoid}")
-    public ResponseEntity<String> getTranscript(@PathVariable String videoid) {
+    
+    @GetMapping("/get-transcript/{videoid}")
+    public ApiResponse getTranscript(@PathVariable String videoid) {
         String transcript=transcriptService.getTranscriptContent(videoid);
-        return ResponseEntity.ok(transcript);
+        return ApiResponse.success(transcript, "Lấy transcript thành công");
     }
 }

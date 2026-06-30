@@ -14,21 +14,21 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/vocab-set")
 @RequiredArgsConstructor
 public class AdminVocabSetController {
 
     private final WordService wordService;
 
     // Lấy danh sách từ vựng theo bộ từ
-    @GetMapping("/vocab-sets/{setId}/words")
+    @GetMapping("/get-words/{setId}")
     public ApiResponse getWordsBySet(@PathVariable String setId) {
         List<WordDTO> words = wordService.getByVocabId(setId);
         return ApiResponse.success(words, "Lấy danh sách từ vựng thành công");
     }
 
     // Thêm một từ vựng mới vào bộ từ
-    @PostMapping("/vocab-sets/{setId}/words")
+    @PostMapping("/create-word/{setId}")
     public ApiResponse createWord(@PathVariable String setId, @RequestBody WordDTO dto, @RequestParam(defaultValue = "check") String action) {
         dto.setVocabID(setId);
         WordDTO created = wordService.create(dto, action);
@@ -36,7 +36,7 @@ public class AdminVocabSetController {
     }
 
     // Cập nhật từ vựng
-    @PutMapping("/words/{wordId}")
+    @PutMapping("/update-word/{wordId}")
     public ApiResponse updateWord(@PathVariable String wordId, @RequestBody WordDTO dto) {
         WordDTO updated = wordService.update(wordId, dto);
         if (updated == null) {
@@ -46,14 +46,14 @@ public class AdminVocabSetController {
     }
 
     // Xóa từ vựng
-    @DeleteMapping("/words/{wordId}")
+    @DeleteMapping("/delete-word/{wordId}")
     public ApiResponse deleteWord(@PathVariable String wordId) {
         wordService.delete(wordId);
         return ApiResponse.success(null, "Xóa từ vựng thành công");
     }
 
     // Tải template file excel
-    @GetMapping("/vocab-sets/excel-template")
+    @GetMapping("/excel-template")
     public ResponseEntity<byte[]> getExcelTemplate() {
         try {
             byte[] fileContent = wordService.generateExcelTemplate();
@@ -67,7 +67,7 @@ public class AdminVocabSetController {
     }
 
     // Upload file excel thêm từ vựng vào bộ
-    @PostMapping("/vocab-sets/{setId}/words/excel")
+    @PostMapping("/import-words/{setId}")
     public ApiResponse importWordsFromExcel(@PathVariable String setId, 
                                             @RequestParam("file") MultipartFile file, 
                                             @RequestParam(defaultValue = "check") String action,

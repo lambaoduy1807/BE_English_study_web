@@ -10,6 +10,6 @@ public interface NotificationService {
     NotificationEntity createNotification(String userId, String title, String message);
     
     // Gửi thông báo
-    void sendBulkNotification(String targetType, String targetUserId, String title, String message);
+    void sendBulkNotification(String targetType, String targetUserId, String title, String message, String createdBy);
     List<com.english_study.model.entity.NotificationLogEntity> getNotificationHistory();
 }

@@ -51,13 +51,14 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendBulkNotification(String targetType, String targetUserId, String title, String message) {
+    public void sendBulkNotification(String targetType, String targetUserId, String title, String message, String createdBy) {
         // Lưu vào log
         NotificationLogEntity log = NotificationLogEntity.builder()
                 .title(title)
                 .message(message)
                 .targetType(targetType)
                 .targetUserId(targetUserId)
+                .createdBy(createdBy)
                 .createdAt(new Date())
                 .build();
         notificationLogRepository.save(log);

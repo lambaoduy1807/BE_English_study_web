@@ -33,14 +33,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/**",
-                                "/api/videos",
-                                "/api/videos/**",
-                                "/api/vocab-sets",
-                                "/api/vocab-sets/**",
-                                "/api/words",
-                                "/api/words/**",
-                                "/api/categories"
+                                "/api/auth/**",
+                                "/api/video/**",
+                                "/api/vocab-set/**",
+                                "/api/word/**",
+                                "/api/category/**"
                                 ).permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
