@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -34,4 +34,7 @@ public class UserDTO {
     private String refreshToken;//Token để xác thực và cấp lại accessToken
 
     private List<String> my_vocabs;// danh sách id của các bộ từ vựng
+
+    private String authProvider;
+    private boolean isEmailVerified;
 }

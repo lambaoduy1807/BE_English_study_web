@@ -1,4 +1,4 @@
-package com.english_study.controller;
+package com.english_study.controller.admin;
 
 import com.english_study.model.response.ApiResponse;
 import com.english_study.service.UserService;

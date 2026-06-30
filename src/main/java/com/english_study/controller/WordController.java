@@ -31,24 +31,4 @@ public class WordController {
         }
         return ResponseEntity.ok(dto);
     }
-
-    @PostMapping
-    public ResponseEntity<WordDTO> create(@RequestBody WordDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<WordDTO> update(@PathVariable String id, @RequestBody WordDTO dto) {
-        WordDTO updated = service.update(id, dto);
-        if (updated == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updated);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 }
