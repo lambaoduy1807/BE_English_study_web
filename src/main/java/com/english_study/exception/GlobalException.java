@@ -45,6 +45,13 @@ public class GlobalException {
                 .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
 
+    @ExceptionHandler(ConflictWordException.class)
+    public org.springframework.http.ResponseEntity<ApiResponse<?>> handleConflictWordException(ConflictWordException ex) {
+        log.error("CONFLICT_WORD: {}", ex.getMessage(), ex);
+        return org.springframework.http.ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.errorWithData(HttpStatus.CONFLICT.value(), ex.getMessage(), ex.getConflicts()));
+    }
+
     @ExceptionHandler(Exception.class)
     public org.springframework.http.ResponseEntity<ApiResponse<?>> handleException(Exception ex) {
         log.error("UNEXPECTED_ERROR: {}", ex.getMessage(), ex);

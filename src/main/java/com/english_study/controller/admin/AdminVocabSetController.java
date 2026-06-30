@@ -29,9 +29,9 @@ public class AdminVocabSetController {
 
     // Thêm một từ vựng mới vào bộ từ
     @PostMapping("/vocab-sets/{setId}/words")
-    public ApiResponse createWord(@PathVariable String setId, @RequestBody WordDTO dto) {
+    public ApiResponse createWord(@PathVariable String setId, @RequestBody WordDTO dto, @RequestParam(defaultValue = "check") String action) {
         dto.setVocabID(setId);
-        WordDTO created = wordService.create(dto);
+        WordDTO created = wordService.create(dto, action);
         return ApiResponse.success(created, "Thêm từ vựng thành công");
     }
 
@@ -68,9 +68,12 @@ public class AdminVocabSetController {
 
     // Upload file excel thêm từ vựng vào bộ
     @PostMapping("/vocab-sets/{setId}/words/excel")
-    public ApiResponse importWordsFromExcel(@PathVariable String setId, @RequestParam("file") MultipartFile file) {
+    public ApiResponse importWordsFromExcel(@PathVariable String setId, 
+                                            @RequestParam("file") MultipartFile file, 
+                                            @RequestParam(defaultValue = "check") String action,
+                                            @RequestParam(required = false) List<String> wordsToReplace) {
         try {
-            wordService.importWordsFromExcel(setId, file);
+            wordService.importWordsFromExcel(setId, file, action, wordsToReplace);
             return ApiResponse.success(null, "Nhập dữ liệu từ Excel thành công");
         } catch (IOException e) {
             return ApiResponse.error(500, "Lỗi khi xử lý file Excel: " + e.getMessage());

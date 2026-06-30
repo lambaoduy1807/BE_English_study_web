@@ -10,4 +10,7 @@ import java.util.List;
 public interface WordRepository extends MongoRepository<Word, String> {
     @Query("{ 'vocabID' : ?0 }")
     List<Word> findByVocabID(String vocabID);
+
+    @Query("{ 'vocabID' : ?0, 'word' : ?1 }")
+    Word findByVocabIDAndWord(String vocabID, String word);
 }
