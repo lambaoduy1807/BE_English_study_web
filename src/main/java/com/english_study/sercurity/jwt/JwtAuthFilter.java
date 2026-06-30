@@ -2,6 +2,8 @@ package com.english_study.sercurity.jwt;
 
 
 import com.english_study.model.JwtUserPrincipal;
+import com.english_study.model.entity.UserEntity;
+import com.english_study.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,6 +25,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -47,6 +52,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String role = claims.get("role", String.class);
                 String name = claims.get("name", String.class);
                 Long phone = claims.get("phone", Long.class);
+
+                UserEntity user = userRepository.findById(userId).orElse(null);
+                if (user == null || user.isDelete()) {
+                    response.sendError(423, "Tài khoản của bạn đã bị khóa hoặc không tồn tại.");
+                    return;
+                }
 
                 JwtUserPrincipal principal = new JwtUserPrincipal(
                         userId,

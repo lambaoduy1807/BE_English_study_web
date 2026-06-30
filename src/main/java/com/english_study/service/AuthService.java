@@ -172,6 +172,9 @@ public class AuthService {
                 // Create new user
                 userDTO = userService.createGoogleUser(email, name, pictureUrl);
             } else {
+                if (userEntity.isDelete()) {
+                    throw new com.english_study.exception.InvalidCredentialException("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.");
+                }
                 // Đánh dấu email đã xác thực nếu trước đó đăng ký thường nhưng chưa xác thực
                 if (!userEntity.isEmailVerified()) {
                     userEntity.setEmailVerified(true);
@@ -186,6 +189,8 @@ public class AuthService {
 
             return new TokenResponse(refreshToken, accessToken, userDTO);
 
+        } catch (com.english_study.exception.InvalidCredentialException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to verify Google token", e);
         }
@@ -198,6 +203,11 @@ public class AuthService {
         String userId = jwtUtil.extractUserID(refreshToken);
 
         UserDTO userDTO = userService.getUserByID(userId);
+
+        UserEntity userEntity = userRepository.findById(userId).orElse(null);
+        if (userEntity != null && userEntity.isDelete()) {
+            throw new com.english_study.exception.InvalidCredentialException("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.");
+        }
 
         String newAccessToken = jwtUtil.generateToken(userDTO);
 

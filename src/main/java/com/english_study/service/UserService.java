@@ -2,6 +2,7 @@ package com.english_study.service;
 
 import com.english_study.exception.UserAlreadyExistsException;
 import com.english_study.exception.UserNotFoundException;
+import com.english_study.exception.InvalidCredentialException;
 // Khuyến nghị tạo thêm InvalidCredentialsException cho lỗi sai mật khẩu
 import com.english_study.mapper.UserMapper;
 import com.english_study.model.dto.UserDTO;
@@ -45,11 +46,11 @@ public class UserService {
         }
 
         if (!user.isEmailVerified() && "LOCAL".equals(user.getAuthProvider())) {
-            throw new RuntimeException("Vui lòng kiểm tra email để xác thực tài khoản trước khi đăng nhập.");
+            throw new InvalidCredentialException("Vui lòng kiểm tra email để xác thực tài khoản trước khi đăng nhập.");
         }
 
         if (user.isDelete()) {
-            throw new RuntimeException("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.");
+            throw new InvalidCredentialException("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.");
         }
 
         return userMapper.toUserDTO(user);
