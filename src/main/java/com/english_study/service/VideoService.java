@@ -46,4 +46,11 @@ public class VideoService {
     public void delete(String id) {
         repository.deleteById(id);
     }
+
+    public void incrementViewCount(String id) {
+        repository.findById(id).ifPresent(video -> {
+            video.setViewCount(video.getViewCount() + 1);
+            repository.save(video);
+        });
+    }
 }
