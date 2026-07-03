@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class VideoDTO {
     private Date upload_date;
     private long viewCount;
     private long duration;
+    private List<TranscriptItemDTO> transcripts;
 }
