@@ -21,4 +21,5 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
     void updateRefreshtoken(String id, String refreshToken);
     
     java.util.List<UserEntity> findByRoleId(String roleId);
+    long countByTotalXPGreaterThan(int xp);
 }

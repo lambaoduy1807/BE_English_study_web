@@ -9,6 +9,8 @@ import com.english_study.repository.WordRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.english_study.exception.ResourceNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +46,7 @@ public class WordService {
     public WordDTO getById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy từ vựng"));
     }
 
     public WordDTO create(WordDTO dto, String action) {
@@ -68,7 +70,7 @@ public class WordService {
 
     public WordDTO update(String id, WordDTO dto) {
         if (!repository.existsById(id)) {
-            return null;
+            throw new ResourceNotFoundException("Không tìm thấy từ vựng để cập nhật");
         }
         dto.setWord(dto.getWord().trim().toLowerCase());
         Word entity = mapper.toEntity(dto);

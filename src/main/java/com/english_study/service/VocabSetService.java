@@ -7,6 +7,8 @@ import com.english_study.repository.VocabSetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.english_study.exception.ResourceNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,7 @@ public class VocabSetService {
     public VocabSetDTO getById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bộ từ vựng"));
     }
 
     public VocabSetDTO create(VocabSetDTO dto) {
@@ -36,7 +38,7 @@ public class VocabSetService {
 
     public VocabSetDTO update(String id, VocabSetDTO dto) {
         if (!repository.existsById(id)) {
-            return null;
+            throw new ResourceNotFoundException("Không tìm thấy bộ từ vựng để cập nhật");
         }
         VocabSetEntity entity = mapper.toEntity(dto);
         entity.setId(id);

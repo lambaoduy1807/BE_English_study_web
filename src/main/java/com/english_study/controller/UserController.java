@@ -3,7 +3,7 @@ package com.english_study.controller;
 import com.english_study.config.cloudiary.CloudinaryService;
 import com.english_study.model.request.LoginRequest;
 import com.english_study.model.request.UpdateProfileRequest;
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import com.english_study.sercurity.SecurityUtil;
 import com.english_study.service.UploadService;
 import com.english_study.service.UserService;
@@ -30,13 +30,13 @@ public class UserController {
     UserDailyStatService userDailyStatService;
 
     @PutMapping("/update-profile")
-    public ApiResponse update(@RequestBody UpdateProfileRequest updateRequest) {
+    public ResponseEntity<?> update(@RequestBody UpdateProfileRequest updateRequest) {
         String userID=SecurityUtil.getCurrentUserId();
-        return ApiResponse.success( userService.updateUser(userID,updateRequest),"Cập nhật thông tin thành công");
+        return ResponseEntity.ok( userService.updateUser(userID,updateRequest));
     }
 
     @PostMapping("/update-image")
-    public ApiResponse updateImage(@RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateImage(@RequestParam("image") MultipartFile image) throws IOException {
         String userID = SecurityUtil.getCurrentUserId();
         
         uploadService.validateImage(image);
@@ -44,61 +44,55 @@ public class UserController {
         String url = cloudinaryService.upload(image);
         userService.updateAvatar(userID, url);
         
-        return ApiResponse.success(url, "Cập nhật ảnh đại diện thành công");
+        return ResponseEntity.ok(url);
     }
 
     @GetMapping("/get-stats")
-    public ApiResponse getStats() {
+    public ResponseEntity<?> getStats() {
         String userID = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(userService.getUserStats(userID), "Lấy thông tin thống kê thành công");
+        return ResponseEntity.ok(userService.getUserStats(userID));
     }
 
     // -- User Streak APIs --
     @GetMapping("/get-streak")
-    public ApiResponse getStreak() {
+    public ResponseEntity<?> getStreak() {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(userStreakService.getUserStreak(userId), "Lấy thông tin streak thành công");
+        return ResponseEntity.ok(userStreakService.getUserStreak(userId));
     }
 
     @PostMapping("/increase-streak")
-    public ApiResponse increaseStreak() {
+    public ResponseEntity<?> increaseStreak() {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(userStreakService.increaseStreak(userId), "Tăng streak thành công");
+        return ResponseEntity.ok(userStreakService.increaseStreak(userId));
     }
 
     @PostMapping("/reset-streak")
-    public ApiResponse resetStreak() {
+    public ResponseEntity<?> resetStreak() {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(userStreakService.resetCurrentStreak(userId), "Reset streak thành công");
+        return ResponseEntity.ok(userStreakService.resetCurrentStreak(userId));
     }
 
     @PostMapping("/record-study-day")
-    public ApiResponse recordStudyDay(@RequestParam(defaultValue = "0") int newWordsMemorized) {
+    public ResponseEntity<?> recordStudyDay(@RequestParam(defaultValue = "0") int newWordsMemorized) {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(userStreakService.recordStudyDay(userId, newWordsMemorized), "Ghi nhận ngày học thành công");
+        return ResponseEntity.ok(userStreakService.recordStudyDay(userId, newWordsMemorized));
     }
 
     // -- User Daily Stat APIs --
     @GetMapping("/get-history")
-    public ApiResponse getRecentStudyHistory(
+    public ResponseEntity<?> getRecentStudyHistory(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         
         String userId = SecurityUtil.getCurrentUserId();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "date"));
         
-        return ApiResponse.success(
-                userDailyStatService.getRecentStudyHistory(userId, pageable), 
-                "Lấy lịch sử học tập thành công"
-        );
+        return ResponseEntity.ok(userDailyStatService.getRecentStudyHistory(userId, pageable));
     }
 
     @GetMapping("/get-weekly-stats")
-    public ApiResponse getWeeklyNewWords() {
+    public ResponseEntity<?> getWeeklyNewWords() {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(
-                userDailyStatService.getWeeklyNewWords(userId), 
-                "Lấy số lượng từ vựng mới theo tuần thành công"
-        );
+        return ResponseEntity.ok(userDailyStatService.getWeeklyNewWords(userId));
     }
 }

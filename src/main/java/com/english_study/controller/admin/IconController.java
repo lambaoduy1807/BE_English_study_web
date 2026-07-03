@@ -3,7 +3,7 @@ package com.english_study.controller.admin;
 import com.english_study.mapper.IconMapper;
 import com.english_study.model.dto.IconDTO;
 import com.english_study.model.entity.IconEntity;
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import com.english_study.service.IconService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +20,21 @@ public class IconController {
     private final IconMapper iconMapper;
 
     @GetMapping("/get-all")
-    public ApiResponse<List<IconDTO>> getAllIcons() {
+    public ResponseEntity<List<IconDTO>> getAllIcons() {
         List<IconDTO> dtos = iconService.getAllIcons().stream().map(iconMapper::toDTO).toList();
-        return ApiResponse.success(dtos, "Lấy danh sách icon thành công");
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping("/create")
-    public ApiResponse<IconDTO> createIcon(@RequestBody CreateIconRequest request) {
+    public ResponseEntity<IconDTO> createIcon(@RequestBody CreateIconRequest request) {
         IconEntity icon = iconService.createIcon(request.getName(), request.getCode());
-        return ApiResponse.success(iconMapper.toDTO(icon), "Tạo icon thành công");
+        return ResponseEntity.ok(iconMapper.toDTO(icon));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ApiResponse<Void> deleteIcon(@PathVariable String id) {
+    public ResponseEntity<Void> deleteIcon(@PathVariable String id) {
         iconService.deleteIcon(id);
-        return ApiResponse.success(null, "Xóa icon thành công");
+        return ResponseEntity.ok().build();
     }
 
     @Data
