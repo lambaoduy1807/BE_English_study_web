@@ -2,7 +2,7 @@ package com.english_study.controller;
 
 import com.english_study.mapper.NotificationMapper;
 import com.english_study.model.dto.NotificationDTO;
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import com.english_study.sercurity.SecurityUtil;
 import com.english_study.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -19,23 +19,23 @@ public class NotificationController {
     private final NotificationMapper notificationMapper;
 
     @GetMapping("/get-all")
-    public ApiResponse<List<NotificationDTO>> getNotifications() {
+    public ResponseEntity<List<NotificationDTO>> getNotifications() {
         String userId = SecurityUtil.getCurrentUserId();
         List<NotificationDTO> dtos = notificationService.getNotificationsByUserId(userId).stream().map(notificationMapper::toDTO).toList();
-        return ApiResponse.success(dtos, "Lấy danh sách thông báo thành công");
+        return ResponseEntity.ok(dtos);
     }
 
     @PutMapping("/read")
-    public ApiResponse markAllAsRead() {
+    public ResponseEntity<?> markAllAsRead() {
         String userId = SecurityUtil.getCurrentUserId();
         notificationService.markAllAsRead(userId);
-        return ApiResponse.success(null, "Đã đánh dấu tất cả là đã đọc");
+        return ResponseEntity.ok().build();
     }
     
     // API ẩn dùng để test việc tạo thông báo
     @PostMapping("/test-create")
-    public ApiResponse createTestNotification(@RequestParam String title, @RequestParam String message) {
+    public ResponseEntity<?> createTestNotification(@RequestParam String title, @RequestParam String message) {
         String userId = SecurityUtil.getCurrentUserId();
-        return ApiResponse.success(notificationService.createNotification(userId, title, message), "Tạo thông báo test thành công");
+        return ResponseEntity.ok(notificationService.createNotification(userId, title, message));
     }
 }

@@ -14,4 +14,5 @@ public interface UserDailyStatRepository extends MongoRepository<UserDailyStat, 
     Page<UserDailyStat> findByUserIdOrderByDateDesc(String userId, Pageable pageable);
     java.util.Optional<UserDailyStat> findByUserIdAndDate(String userId, LocalDate date);
     List<UserDailyStat> findByUserIdAndDateBetweenOrderByDateAsc(String userId, LocalDate startDate, LocalDate endDate);
+    List<UserDailyStat> findByDateBetween(LocalDate startDate, LocalDate endDate);
 }

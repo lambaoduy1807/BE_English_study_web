@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface UserStreakRepository extends MongoRepository<UserStreak, String> {
     Optional<UserStreak> findByUserId(String userId);
+    long countByCurrentStreakGreaterThan(int currentStreak);
 }

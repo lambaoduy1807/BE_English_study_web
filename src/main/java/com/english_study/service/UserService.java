@@ -155,6 +155,16 @@ public class UserService {
                 .map(UserDailyStat::getNumMemorizeNew)
                 .orElse(0);
         
+        long currentRankPosition = userRepository.countByTotalXPGreaterThan(user.getTotalXP()) + 1;
+        String dynamicRank = "Hạng " + currentRankPosition;
+        if (currentRankPosition == 1) {
+            dynamicRank = "Kim Cương";
+        } else if (currentRankPosition == 2) {
+            dynamicRank = "Vàng";
+        } else if (currentRankPosition == 3) {
+            dynamicRank = "Đồng";
+        }
+        
         return UserStatsResponse.builder()
                 .totalLearnedWords(totalLearnedWords)
                 .currentStreak(currentStreak)
@@ -162,7 +172,7 @@ public class UserService {
                 .totalWordToday(totalWordToday)
                 .totalXp(user.getTotalXP())
                 .level(user.getLevel())
-                .rank(user.getRank())
+                .rank(dynamicRank)
                 .build();
     }
 

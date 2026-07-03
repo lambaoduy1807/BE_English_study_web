@@ -7,6 +7,8 @@ import com.english_study.repository.VideoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.english_study.exception.ResourceNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,7 @@ public class VideoService {
     public VideoDTO getById(String id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy video"));
     }
 
     public VideoDTO create(VideoDTO dto) {
@@ -36,7 +38,7 @@ public class VideoService {
 
     public VideoDTO update(String id, VideoDTO dto) {
         if (!repository.existsById(id)) {
-            return null;
+            throw new ResourceNotFoundException("Không tìm thấy video để cập nhật");
         }
         Video entity = mapper.toEntity(dto);
         entity.setId(id);

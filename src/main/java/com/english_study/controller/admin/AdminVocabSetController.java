@@ -1,7 +1,7 @@
 package com.english_study.controller.admin;
 
 import com.english_study.model.dto.WordDTO;
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import com.english_study.service.WordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -22,34 +22,31 @@ public class AdminVocabSetController {
 
     // Lấy danh sách từ vựng theo bộ từ
     @GetMapping("/get-words/{setId}")
-    public ApiResponse getWordsBySet(@PathVariable String setId) {
+    public ResponseEntity<?> getWordsBySet(@PathVariable String setId) {
         List<WordDTO> words = wordService.getByVocabId(setId);
-        return ApiResponse.success(words, "Lấy danh sách từ vựng thành công");
+        return ResponseEntity.ok(words);
     }
 
     // Thêm một từ vựng mới vào bộ từ
     @PostMapping("/create-word/{setId}")
-    public ApiResponse createWord(@PathVariable String setId, @RequestBody WordDTO dto, @RequestParam(defaultValue = "check") String action) {
+    public ResponseEntity<?> createWord(@PathVariable String setId, @RequestBody WordDTO dto, @RequestParam(defaultValue = "check") String action) {
         dto.setVocabID(setId);
         WordDTO created = wordService.create(dto, action);
-        return ApiResponse.success(created, "Thêm từ vựng thành công");
+        return ResponseEntity.ok(created);
     }
 
     // Cập nhật từ vựng
     @PutMapping("/update-word/{wordId}")
-    public ApiResponse updateWord(@PathVariable String wordId, @RequestBody WordDTO dto) {
+    public ResponseEntity<?> updateWord(@PathVariable String wordId, @RequestBody WordDTO dto) {
         WordDTO updated = wordService.update(wordId, dto);
-        if (updated == null) {
-            return ApiResponse.error(404, "Không tìm thấy từ vựng");
-        }
-        return ApiResponse.success(updated, "Cập nhật từ vựng thành công");
+        return ResponseEntity.ok(updated);
     }
 
     // Xóa từ vựng
     @DeleteMapping("/delete-word/{wordId}")
-    public ApiResponse deleteWord(@PathVariable String wordId) {
+    public ResponseEntity<?> deleteWord(@PathVariable String wordId) {
         wordService.delete(wordId);
-        return ApiResponse.success(null, "Xóa từ vựng thành công");
+        return ResponseEntity.ok().build();
     }
 
     // Tải template file excel
@@ -68,15 +65,11 @@ public class AdminVocabSetController {
 
     // Upload file excel thêm từ vựng vào bộ
     @PostMapping("/import-words/{setId}")
-    public ApiResponse importWordsFromExcel(@PathVariable String setId, 
+    public ResponseEntity<?> importWordsFromExcel(@PathVariable String setId, 
                                             @RequestParam("file") MultipartFile file, 
                                             @RequestParam(defaultValue = "check") String action,
-                                            @RequestParam(required = false) List<String> wordsToReplace) {
-        try {
-            wordService.importWordsFromExcel(setId, file, action, wordsToReplace);
-            return ApiResponse.success(null, "Nhập dữ liệu từ Excel thành công");
-        } catch (IOException e) {
-            return ApiResponse.error(500, "Lỗi khi xử lý file Excel: " + e.getMessage());
-        }
+                                            @RequestParam(required = false) List<String> wordsToReplace) throws IOException {
+        wordService.importWordsFromExcel(setId, file, action, wordsToReplace);
+        return ResponseEntity.ok().build();
     }
 }

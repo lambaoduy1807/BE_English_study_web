@@ -3,8 +3,8 @@ package com.english_study.controller.admin;
 import com.english_study.mapper.NotificationLogMapper;
 import com.english_study.model.dto.NotificationLogDTO;
 import com.english_study.model.entity.NotificationLogEntity;
-import com.english_study.model.response.ApiResponse;
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 import com.english_study.sercurity.SecurityUtil;
 import com.english_study.service.NotificationService;
 import lombok.Data;
@@ -22,13 +22,13 @@ public class AdminNotificationController {
     private final NotificationLogMapper notificationLogMapper;
 
     @GetMapping("/get-history")
-    public ApiResponse<List<NotificationLogDTO>> getHistory() {
+    public ResponseEntity<List<NotificationLogDTO>> getHistory() {
         List<NotificationLogDTO> dtos = notificationService.getNotificationHistory().stream().map(notificationLogMapper::toDTO).toList();
-        return ApiResponse.success(dtos, "Lấy lịch sử thông báo thành công");
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping("/send")
-    public ApiResponse<Void> sendNotification(@RequestBody SendNotificationRequest request) {
+    public ResponseEntity<Void> sendNotification(@RequestBody SendNotificationRequest request) {
         notificationService.sendBulkNotification(
                 request.getTargetType(),
                 request.getTargetUserId(),
@@ -36,7 +36,7 @@ public class AdminNotificationController {
                 request.getMessage(),
                 SecurityUtil.getCurrentUserId()
         );
-        return ApiResponse.success(null, "Gửi thông báo thành công");
+        return ResponseEntity.ok().build();
     }
 
     @Data

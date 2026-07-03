@@ -1,6 +1,6 @@
 package com.english_study.controller.admin;
 
-import com.english_study.model.response.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import com.english_study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +18,17 @@ public class AdminUserController {
     private final UserService userService;
 
     @GetMapping("/get-all")
-    public ApiResponse getAllUsers() {
-        return ApiResponse.success(userService.getAllUsers(), "Lấy danh sách người dùng thành công");
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PutMapping("/update-role/{id}")
-    public ApiResponse updateUserRole(@PathVariable String id, @RequestParam String roleId) {
-        return ApiResponse.success(userService.updateUserRole(id, roleId), "Cập nhật quyền thành công");
+    public ResponseEntity<?> updateUserRole(@PathVariable String id, @RequestParam String roleId) {
+        return ResponseEntity.ok(userService.updateUserRole(id, roleId));
     }
 
     @PutMapping("/toggle-block/{id}")
-    public ApiResponse toggleUserBlock(@PathVariable String id) {
-        return ApiResponse.success(userService.toggleUserBlock(id), "Cập nhật trạng thái khóa thành công");
+    public ResponseEntity<?> toggleUserBlock(@PathVariable String id) {
+        return ResponseEntity.ok(userService.toggleUserBlock(id));
     }
 }

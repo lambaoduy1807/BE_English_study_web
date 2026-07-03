@@ -6,6 +6,8 @@ import com.english_study.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.english_study.exception.ResourceNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,6 @@ public class CategoryService {
     public CategoryDTO getById(Integer id) {
         return repository.findById(id)
                 .map(mapper::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục"));
     }
 }
