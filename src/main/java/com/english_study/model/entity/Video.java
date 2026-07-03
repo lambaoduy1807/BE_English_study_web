@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -22,4 +23,5 @@ public class Video {
     private Date upload_date;
     private long viewCount;
     private long duration;
+    private List<TranscriptItem> transcripts;
 }

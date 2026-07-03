@@ -1,17 +1,15 @@
-package com.english_study.controller;
+package com.english_study.controller.admin;
 
 import com.english_study.model.dto.VideoDTO;
-import com.english_study.service.VideoService;
-import lombok.AllArgsConstructor;
 import com.english_study.model.response.ApiResponse;
+import com.english_study.service.VideoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/video")
-@AllArgsConstructor
-public class VideoController {
+@RequestMapping("/api/admin/video")
+@RequiredArgsConstructor
+public class AdminVideoController {
 
     private final VideoService service;
 
@@ -47,11 +45,5 @@ public class VideoController {
     public ApiResponse delete(@PathVariable String id) {
         service.delete(id);
         return ApiResponse.success(null, "Xóa video thành công");
-    }
-    
-    @GetMapping("/get-transcript/{videoid}")
-    public ApiResponse getTranscript(@PathVariable String videoid) {
-        String transcript=transcriptService.getTranscriptContent(videoid);
-        return ApiResponse.success(transcript, "Lấy transcript thành công");
     }
 }
