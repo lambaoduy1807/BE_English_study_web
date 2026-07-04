@@ -158,9 +158,9 @@ public class UserService {
         long currentRankPosition = userRepository.countByTotalXPGreaterThan(user.getTotalXP()) + 1;
         String dynamicRank = "Hạng " + currentRankPosition;
         if (currentRankPosition == 1) {
-            dynamicRank = "Kim Cương";
-        } else if (currentRankPosition == 2) {
             dynamicRank = "Vàng";
+        } else if (currentRankPosition == 2) {
+            dynamicRank = "Bạc";
         } else if (currentRankPosition == 3) {
             dynamicRank = "Đồng";
         }

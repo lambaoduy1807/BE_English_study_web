@@ -56,8 +56,8 @@ public class AdminDashboardService {
         for (int i = 0; i < topN; i++) {
             UserEntity user = sortedUsers.get(i);
             String dynamicRank = "Hạng " + (i + 1);
-            if (i == 0) dynamicRank = "Kim Cương";
-            else if (i == 1) dynamicRank = "Vàng";
+            if (i == 0) dynamicRank = "Vàng";
+            else if (i == 1) dynamicRank = "Bạc";
             else if (i == 2) dynamicRank = "Đồng";
             
             topUsers.add(AdminDashboardResponseDTO.TopUserDTO.builder()
