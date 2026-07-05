@@ -17,4 +17,5 @@ public class VocabSetDTO {
     @com.fasterxml.jackson.annotation.JsonProperty("categoryID")
     private int categoryID;
     private String created_at;
+    private String createdBy;
 }
