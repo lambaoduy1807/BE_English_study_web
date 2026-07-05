@@ -68,6 +68,22 @@ public class WordService {
         return mapper.toDTO(saved);
     }
 
+    public List<WordDTO> createWords(String vocabID, List<WordDTO> words) {
+        List<Word> entities = words.stream().map(dto -> {
+            dto.setVocabID(vocabID);
+            dto.setWord(dto.getWord().trim().toLowerCase());
+            return mapper.toEntity(dto);
+        }).collect(Collectors.toList());
+        List<Word> saved = repository.saveAll(entities);
+        updateVocabSetWordCount(vocabID);
+        return saved.stream().map(mapper::toDTO).collect(Collectors.toList());
+    }
+
+    public List<WordDTO> updateWordsForVocabSet(String vocabID, List<WordDTO> words) {
+        repository.deleteByVocabID(vocabID);
+        return createWords(vocabID, words);
+    }
+
     public WordDTO update(String id, WordDTO dto) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Không tìm thấy từ vựng để cập nhật");
@@ -186,5 +202,38 @@ public class WordService {
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
             default -> "";
         };
+    }
+
+    public java.util.List<WordDTO> parseWordsFromExcel(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
+        try (org.apache.poi.ss.usermodel.Workbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(file.getInputStream())) {
+            org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
+            java.util.Iterator<org.apache.poi.ss.usermodel.Row> rows = sheet.iterator();
+            
+            int rowNumber = 0;
+            java.util.List<WordDTO> parsedWords = new java.util.ArrayList<>();
+            
+            while (rows.hasNext()) {
+                org.apache.poi.ss.usermodel.Row currentRow = rows.next();
+                
+                if (rowNumber == 0) {
+                    rowNumber++;
+                    continue;
+                }
+                
+                String wordText = getCellValue(currentRow.getCell(0));
+                if (wordText == null || wordText.trim().isEmpty()) {
+                    continue;
+                }
+                wordText = wordText.trim().toLowerCase();
+                
+                String mean = getCellValue(currentRow.getCell(1));
+                String type = getCellValue(currentRow.getCell(2));
+                String example = getCellValue(currentRow.getCell(3));
+                
+                WordDTO word = new WordDTO(null, wordText, mean, type, example, null);
+                parsedWords.add(word);
+            }
+            return parsedWords;
+        }
     }
 }

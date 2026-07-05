@@ -13,4 +13,6 @@ public interface WordRepository extends MongoRepository<Word, String> {
 
     @Query("{ 'vocabID' : ?0, 'word' : ?1 }")
     Word findByVocabIDAndWord(String vocabID, String word);
+
+    void deleteByVocabID(String vocabID);
 }
