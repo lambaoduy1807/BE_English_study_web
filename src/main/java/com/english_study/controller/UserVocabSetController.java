@@ -82,4 +82,67 @@ public class UserVocabSetController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/add-system/{vocabId}")
+    public ResponseEntity<?> addSystemVocabSet(@PathVariable String vocabId) {
+        String userId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(service.addSystemVocabSet(userId, vocabId));
+    }
+
+    @PostMapping("/custom")
+    public ResponseEntity<?> createCustomVocabSet(@RequestBody com.english_study.model.request.CustomVocabSetRequest request) {
+        try {
+            String userId = SecurityUtil.getCurrentUserId();
+            return ResponseEntity.ok(service.createCustomVocabSet(userId, request));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(java.util.Collections.singletonMap("error", e.getMessage() + " - " + e.toString()));
+        }
+    }
+
+    @PutMapping("/custom/{vocabId}")
+    public ResponseEntity<?> updateCustomVocabSet(@PathVariable String vocabId, @RequestBody com.english_study.model.request.CustomVocabSetRequest request) {
+        try {
+            String userId = SecurityUtil.getCurrentUserId();
+            return ResponseEntity.ok(service.updateCustomVocabSet(userId, vocabId, request));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(java.util.Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/custom/{vocabId}")
+    public ResponseEntity<?> deleteCustomVocabSet(@PathVariable String vocabId) {
+        try {
+            String userId = SecurityUtil.getCurrentUserId();
+            service.deleteCustomVocabSet(userId, vocabId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(java.util.Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/excel-template")
+    public ResponseEntity<byte[]> getExcelTemplate() {
+        try {
+            byte[] fileContent = service.generateExcelTemplate();
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "Vocabulary_Template.xlsx");
+            return ResponseEntity.ok().headers(headers).body(fileContent);
+        } catch (java.io.IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/parse-excel")
+    public ResponseEntity<?> parseExcel(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        try {
+            return ResponseEntity.ok(service.parseWordsFromExcel(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(java.util.Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
 }

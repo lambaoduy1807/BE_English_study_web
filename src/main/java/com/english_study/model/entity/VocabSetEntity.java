@@ -22,5 +22,6 @@ public class VocabSetEntity {
     private String icon;
     private int categoryID;
     private String created_at;
+    private String createdBy;
 
 }

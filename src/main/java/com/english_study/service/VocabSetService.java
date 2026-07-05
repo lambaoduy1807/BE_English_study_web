@@ -20,7 +20,7 @@ public class VocabSetService {
     private final VocabSetMapper mapper;
 
     public List<VocabSetDTO> getAll() {
-        return repository.findAll().stream()
+        return repository.findByCreatedByIsNull().stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
     }
