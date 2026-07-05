@@ -17,6 +17,7 @@ public class VocabSetMapper {
                 .icon(entity.getIcon())
                 .categoryID(entity.getCategoryID())
                 .created_at(entity.getCreated_at())
+                .createdBy(entity.getCreatedBy())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class VocabSetMapper {
                 .icon(dto.getIcon())
                 .categoryID(dto.getCategoryID())
                 .created_at(dto.getCreated_at())
+                .createdBy(dto.getCreatedBy())
                 .build();
     }
 }

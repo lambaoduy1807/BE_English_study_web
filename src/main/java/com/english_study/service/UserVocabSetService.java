@@ -20,6 +20,95 @@ public class UserVocabSetService {
     private final UserVocabSetRepository repository;
     private final VocabSetRepository vocabSetRepository;
     private final UserVocabSetMapper mapper;
+    private final WordService wordService;
+    private final VocabSetService vocabSetService;
+
+    public byte[] generateExcelTemplate() throws java.io.IOException {
+        return wordService.generateExcelTemplate();
+    }
+
+    public List<com.english_study.model.dto.WordDTO> parseWordsFromExcel(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
+        return wordService.parseWordsFromExcel(file);
+    }
+
+    public UserVocabSetDTO addSystemVocabSet(String userId, String vocabId) {
+        UserVocabSet userVocabSet = repository.findByUserIDAndVocabID(userId, vocabId);
+        if (userVocabSet == null) {
+            userVocabSet = UserVocabSet.builder()
+                    .userID(userId)
+                    .vocabID(vocabId)
+                    .learningProgress(0)
+                    .numMemorizeNew(0)
+                    .xpNew(0)
+                    .memoryWords(new java.util.ArrayList<>())
+                    .clozeWords(new java.util.ArrayList<>())
+                    .updatedAt(java.time.LocalDateTime.now())
+                    .build();
+            return mapper.toDTO(repository.save(userVocabSet));
+        }
+        return mapper.toDTO(userVocabSet);
+    }
+
+    public UserVocabSetDTO createCustomVocabSet(String userId, com.english_study.model.request.CustomVocabSetRequest request) {
+        com.english_study.model.dto.VocabSetDTO vocabSetDTO = request.getVocabSet();
+        vocabSetDTO.setCreatedBy(userId);
+        com.english_study.model.dto.VocabSetDTO createdVocabSet = vocabSetService.create(vocabSetDTO);
+
+        if (request.getWords() != null && !request.getWords().isEmpty()) {
+            wordService.createWords(createdVocabSet.getId(), request.getWords());
+        }
+
+        UserVocabSet userVocabSet = UserVocabSet.builder()
+                .userID(userId)
+                .vocabID(createdVocabSet.getId())
+                .learningProgress(0)
+                .numMemorizeNew(0)
+                .xpNew(0)
+                .memoryWords(new java.util.ArrayList<>())
+                .clozeWords(new java.util.ArrayList<>())
+                .updatedAt(java.time.LocalDateTime.now())
+                .build();
+
+        return mapper.toDTO(repository.save(userVocabSet));
+    }
+
+    public UserVocabSetDTO updateCustomVocabSet(String userId, String vocabId, com.english_study.model.request.CustomVocabSetRequest request) {
+        com.english_study.model.entity.VocabSetEntity existing = vocabSetRepository.findById(vocabId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bộ từ vựng"));
+        if (!userId.equals(existing.getCreatedBy())) {
+            throw new RuntimeException("Bạn không có quyền cập nhật bộ từ này");
+        }
+
+        com.english_study.model.dto.VocabSetDTO vocabSetDTO = request.getVocabSet();
+        vocabSetDTO.setCreatedBy(userId);
+        vocabSetService.update(vocabId, vocabSetDTO);
+
+        if (request.getWords() != null) {
+            wordService.updateWordsForVocabSet(vocabId, request.getWords());
+        }
+
+        UserVocabSet userVocabSet = repository.findByUserIDAndVocabID(userId, vocabId);
+        if (userVocabSet != null) {
+            return mapper.toDTO(userVocabSet);
+        }
+        return null;
+    }
+
+    public void deleteCustomVocabSet(String userId, String vocabId) {
+        com.english_study.model.entity.VocabSetEntity existing = vocabSetRepository.findById(vocabId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bộ từ vựng"));
+        if (!userId.equals(existing.getCreatedBy())) {
+            throw new RuntimeException("Bạn không có quyền xoá bộ từ này");
+        }
+
+        wordService.updateWordsForVocabSet(vocabId, new java.util.ArrayList<>()); // delete words
+        vocabSetService.delete(vocabId);
+        
+        UserVocabSet userVocabSet = repository.findByUserIDAndVocabID(userId, vocabId);
+        if (userVocabSet != null) {
+            repository.delete(userVocabSet);
+        }
+    }
 
     public List<UserVocabSetDTO> getAll() {
         return repository.findAll().stream()
