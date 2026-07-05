@@ -95,4 +95,10 @@ public class UserController {
         String userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.ok(userDailyStatService.getWeeklyNewWords(userId));
     }
+
+    @GetMapping("/get-monthly-stats")
+    public ResponseEntity<?> getMonthlyNewWords() {
+        String userId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(userDailyStatService.getMonthlyNewWords(userId));
+    }
 }
