@@ -99,6 +99,31 @@ public class UserDailyStatService {
         return weeklyStats;
     }
 
+    public List<WeeklyStatResponse> getMonthlyNewWords(String userId) {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusDays(29); // 30 days including today
+
+        List<UserDailyStat> stats = userDailyStatRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, startDate, endDate);
+
+        // Map to quickly find stats by date
+        Map<LocalDate, UserDailyStat> statMap = stats.stream()
+                .collect(Collectors.toMap(UserDailyStat::getDate, Function.identity()));
+
+        List<WeeklyStatResponse> monthlyStats = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            LocalDate date = startDate.plusDays(i);
+            UserDailyStat stat = statMap.get(date);
+            int newWords = (stat != null) ? stat.getNumMemorizeNew() : 0;
+
+            monthlyStats.add(WeeklyStatResponse.builder()
+                    .date(date)
+                    .numMemorizeNew(newWords)
+                    .build());
+        }
+
+        return monthlyStats;
+    }
+
     public void recordDailyStat(String userId, String vocabId, int newWords, int xpGained) {
         LocalDate today = LocalDate.now();
         UserDailyStat dailyStat = userDailyStatRepository.findByUserIdAndDate(userId, today)
