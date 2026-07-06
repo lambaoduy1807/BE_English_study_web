@@ -40,9 +40,9 @@ spring:
 # JWT custom config
 # ===============================
 jwt:
-  secret: ${JWT_SECRET:my-secret-key}
-  access-token-expiration: 3600000        # 1h (ms)
-  refresh-token-expiration: 604800000     # 7 ngày
+  secret: ${JWT_SECRET:my-secret-key-my-secret-key-my-secret-key}
+  access-token-expiration: ${JWT_ACCESS_EXPIRATION:3600000}        # 1h (ms)
+  refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800000}     # 7 ngày
 
 # ===============================
 # Logging

@@ -81,18 +81,22 @@ public class UserStreakService {
         if (userStreak.getLastActiveDay() == null) {
             // Ngày đầu tiên học
             userStreak.setCurrentStreak(1);
+            userStreak.setNumMemorize(newWordsMemorized);
         } else if (userStreak.getLastActiveDay().isEqual(today.minusDays(1))) {
             // Học liên tục ngày hôm qua -> hôm nay
             userStreak.setCurrentStreak(userStreak.getCurrentStreak() + 1);
+            userStreak.setNumMemorize(userStreak.getNumMemorize() + newWordsMemorized);
         } else if (userStreak.getLastActiveDay().isBefore(today.minusDays(1))) {
             // Bị đứt chuỗi (trước hôm qua)
             userStreak.setCurrentStreak(1);
+            userStreak.setNumMemorize(newWordsMemorized);
+        } else if (userStreak.getLastActiveDay().isEqual(today)) {
+            // Học nhiều lần trong ngày
+            userStreak.setNumMemorize(userStreak.getNumMemorize() + newWordsMemorized);
         }
-        // Nếu user học nhiều lần trong ngày (isEqual(today)), thì streak giữ nguyên
         
         userStreak.setLastActiveDay(today);
         userStreak.setUpdatedAt(LocalDateTime.now());
-        userStreak.setNumMemorize(newWordsMemorized);
         
         checkAndUpdateLongestStreak(userStreak);
         

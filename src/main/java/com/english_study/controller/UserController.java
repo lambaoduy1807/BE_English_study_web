@@ -101,4 +101,17 @@ public class UserController {
         String userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.ok(userDailyStatService.getMonthlyNewWords(userId));
     }
+
+    @PostMapping("/record-video-session")
+    public ResponseEntity<?> recordVideoSession(@RequestBody com.english_study.model.request.RecordVideoSessionRequest request) {
+        String userId = SecurityUtil.getCurrentUserId();
+        int xpGained = request.getCorrectScriptsCount() * 20;
+        
+        userDailyStatService.recordVideoStat(userId, request.getVideoId(), 0, xpGained);
+        if (xpGained > 0) {
+            userService.addXP(userId, xpGained);
+        }
+        
+        return ResponseEntity.ok(java.util.Collections.singletonMap("xpGained", xpGained));
+    }
 }
