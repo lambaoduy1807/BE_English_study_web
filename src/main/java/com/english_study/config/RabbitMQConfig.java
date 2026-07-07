@@ -52,6 +52,25 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(studyStatQueue).to(studyStatExchange).with(STUDY_STAT_ROUTING_KEY);
     }
 
+    public static final String NOTIFICATION_BULK_QUEUE = "notification.bulk.queue";
+    public static final String NOTIFICATION_BULK_EXCHANGE = "notification.bulk.exchange";
+    public static final String NOTIFICATION_BULK_ROUTING_KEY = "notification.bulk.routing.key";
+
+    @Bean
+    public Queue notificationBulkQueue() {
+        return new Queue(NOTIFICATION_BULK_QUEUE, true);
+    }
+
+    @Bean
+    public DirectExchange notificationBulkExchange() {
+        return new DirectExchange(NOTIFICATION_BULK_EXCHANGE);
+    }
+
+    @Bean
+    public Binding notificationBulkBinding(Queue notificationBulkQueue, DirectExchange notificationBulkExchange) {
+        return BindingBuilder.bind(notificationBulkQueue).to(notificationBulkExchange).with(NOTIFICATION_BULK_ROUTING_KEY);
+    }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
