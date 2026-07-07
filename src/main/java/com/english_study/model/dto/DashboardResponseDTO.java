@@ -18,6 +18,20 @@ public class DashboardResponseDTO {
     private int progressPercent;
     private List<Date> checkinHistory;
     private VideoProgressDTO currentVideo;
+    private List<LeaderboardUserDTO> leaderboard;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class LeaderboardUserDTO {
+        private String id;
+        private String name;
+        private int xp;
+        private int rankPosition;
+        private String rankName;
+        private boolean isCurrentUser;
+    }
 
     @Data
     @NoArgsConstructor
