@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,11 +48,35 @@ public class DashboardService {
                 .map(stat -> java.util.Date.from(stat.getDate().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()))
                 .collect(java.util.stream.Collectors.toList());
 
+        List<UserEntity> allUsers = userRepository.findAll();
+        List<UserEntity> sortedUsers = new java.util.ArrayList<>(allUsers);
+        sortedUsers.sort((u1, u2) -> Integer.compare(u2.getTotalXP(), u1.getTotalXP()));
+
+        java.util.List<DashboardResponseDTO.LeaderboardUserDTO> leaderboard = new java.util.ArrayList<>();
+        int topN = Math.min(10, sortedUsers.size());
+        for (int i = 0; i < topN; i++) {
+            UserEntity u = sortedUsers.get(i);
+            String rankName = "Hạng " + (i + 1);
+            if (i == 0) rankName = "Master";
+            else if (i == 1) rankName = "Diamond";
+            else if (i == 2) rankName = "Platinum";
+
+            leaderboard.add(DashboardResponseDTO.LeaderboardUserDTO.builder()
+                    .id(u.getId())
+                    .name(u.getFullName() != null ? u.getFullName() : u.getUsername())
+                    .xp(u.getTotalXP())
+                    .rankPosition(i + 1)
+                    .rankName(rankName)
+                    .isCurrentUser(u.getId().equals(userId))
+                    .build());
+        }
+
         DashboardResponseDTO response = DashboardResponseDTO.builder()
                 .dailyGoal(dailyGoalStr)
                 .todayXP(currentXp)
                 .progressPercent(progressPercent)
                 .checkinHistory(checkinHistory)
+                .leaderboard(leaderboard)
                 .build();
 
         Optional<UserVideoProgress> progressOpt = progressRepository.findTopByUserIdOrderByLastWatchedDesc(userId);
