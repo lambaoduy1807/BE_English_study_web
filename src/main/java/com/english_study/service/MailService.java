@@ -1,12 +1,12 @@
 package com.english_study.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.english_study.config.RabbitMQConfig;
+import com.english_study.model.dto.EmailMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,23 +24,17 @@ public class MailService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
+    private final RabbitTemplate rabbitTemplate;
 
     public void sendEmail(String to, String subject, String body) {
-        try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setFrom(fromEmail);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, true); // true indicates HTML
-
-            javaMailSender.send(message);
-            log.info("Email sent to {}", to);
-        } catch (MessagingException e) {
-            log.error("Failed to send email to {}", to, e);
-            throw new RuntimeException("Failed to send email");
-        }
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(to)
+                .subject(subject)
+                .body(body)
+                .build();
+        
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EMAIL_EXCHANGE, RabbitMQConfig.EMAIL_ROUTING_KEY, emailMessage);
+        log.info("Email message pushed to RabbitMQ for: {}", to);
     }
 
     public void sendVerificationEmail(String to, String token) {

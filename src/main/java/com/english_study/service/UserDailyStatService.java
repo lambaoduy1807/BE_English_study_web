@@ -9,6 +9,8 @@ import com.english_study.model.response.WeeklyStatResponse;
 import com.english_study.repository.UserDailyStatRepository;
 import com.english_study.repository.UserVocabSetRepository;
 import com.english_study.repository.VocabSetRepository;
+import com.english_study.repository.VideoRepository;
+import com.english_study.model.entity.Video;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class UserDailyStatService {
     private final UserDailyStatRepository userDailyStatRepository;
     private final UserVocabSetRepository userVocabSetRepository;
     private final VocabSetRepository vocabSetRepository;
+    private final VideoRepository videoRepository;
 
     public Page<DailyStatResponse> getRecentStudyHistory(String userId, Pageable pageable) {
         Page<UserDailyStat> stats = userDailyStatRepository.findByUserIdOrderByDateDesc(userId, pageable);
@@ -37,9 +40,17 @@ public class UserDailyStatService {
             List<DailyVocabSetDetail> vocabDetails = new ArrayList<>();
             if (stat.getVocabSets() != null && !stat.getVocabSets().isEmpty()) {
                 for (String vocabId : stat.getVocabSets()) {
-                    String vocabName = vocabSetRepository.findById(vocabId)
-                            .map(VocabSetEntity::getTitle)
-                            .orElse("Unknown");
+                    String vocabName;
+                    if (vocabId.startsWith("VID_")) {
+                        String videoId = vocabId.substring(4);
+                        vocabName = videoRepository.findById(videoId)
+                                .map(Video::getTitle)
+                                .orElse("Video bài tập");
+                    } else {
+                        vocabName = vocabSetRepository.findById(vocabId)
+                                .map(VocabSetEntity::getTitle)
+                                .orElse("Unknown");
+                    }
 
                     UserVocabSet userVocabSet = userVocabSetRepository.findByUserIDAndVocabID(userId, vocabId);
 
@@ -78,7 +89,7 @@ public class UserDailyStatService {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(6); // 7 days including today
 
-        List<UserDailyStat> stats = userDailyStatRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, startDate, endDate);
+        List<UserDailyStat> stats = userDailyStatRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, startDate.minusDays(1), endDate.plusDays(1));
 
         // Map to quickly find stats by date
         Map<LocalDate, UserDailyStat> statMap = stats.stream()
@@ -103,7 +114,7 @@ public class UserDailyStatService {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(29); // 30 days including today
 
-        List<UserDailyStat> stats = userDailyStatRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, startDate, endDate);
+        List<UserDailyStat> stats = userDailyStatRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, startDate.minusDays(1), endDate.plusDays(1));
 
         // Map to quickly find stats by date
         Map<LocalDate, UserDailyStat> statMap = stats.stream()
@@ -147,5 +158,47 @@ public class UserDailyStatService {
         }
 
         userDailyStatRepository.save(dailyStat);
+    }
+
+    public void recordVideoStat(String userId, String videoId, int newWords, int xpGained) {
+        String prefixedId = "VID_" + videoId;
+        LocalDate today = LocalDate.now();
+        UserDailyStat dailyStat = userDailyStatRepository.findByUserIdAndDate(userId, today)
+                .orElse(UserDailyStat.builder()
+                        .userId(userId)
+                        .date(today)
+                        .numMemorizeNew(0)
+                        .xpNew(0)
+                        .vocabSets(new ArrayList<>())
+                        .build());
+
+        dailyStat.setNumMemorizeNew(dailyStat.getNumMemorizeNew() + newWords);
+        dailyStat.setXpNew(dailyStat.getXpNew() + xpGained);
+        dailyStat.setUpdatedAt(LocalDateTime.now());
+
+        if (dailyStat.getVocabSets() == null) {
+            dailyStat.setVocabSets(new ArrayList<>());
+        }
+        if (!dailyStat.getVocabSets().contains(prefixedId)) {
+            dailyStat.getVocabSets().add(prefixedId);
+        }
+
+        userDailyStatRepository.save(dailyStat);
+
+        UserVocabSet userVocabSet = userVocabSetRepository.findByUserIDAndVocabID(userId, prefixedId);
+        if (userVocabSet == null) {
+            userVocabSet = UserVocabSet.builder()
+                    .userID(userId)
+                    .vocabID(prefixedId)
+                    .numMemorizeNew(newWords)
+                    .xpNew(xpGained)
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+        } else {
+            userVocabSet.setNumMemorizeNew(userVocabSet.getNumMemorizeNew() + newWords);
+            userVocabSet.setXpNew(userVocabSet.getXpNew() + xpGained);
+            userVocabSet.setUpdatedAt(LocalDateTime.now());
+        }
+        userVocabSetRepository.save(userVocabSet);
     }
 }

@@ -139,7 +139,9 @@ public class UserService {
         int totalLearnedWords = 0;
         if (vocabSets != null) {
             for (UserVocabSet set : vocabSets) {
-                totalLearnedWords += set.getLearningProgress();
+                if (set.getMemoryWords() != null) {
+                    totalLearnedWords += set.getMemoryWords().size();
+                }
             }
         }
         int currentStreak = 0;

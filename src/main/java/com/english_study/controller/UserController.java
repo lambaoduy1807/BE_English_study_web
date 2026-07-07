@@ -28,6 +28,7 @@ public class UserController {
     CloudinaryService cloudinaryService;
     UserStreakService userStreakService;
     UserDailyStatService userDailyStatService;
+    org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
     @PutMapping("/update-profile")
     public ResponseEntity<?> update(@RequestBody UpdateProfileRequest updateRequest) {
@@ -75,7 +76,14 @@ public class UserController {
     @PostMapping("/record-study-day")
     public ResponseEntity<?> recordStudyDay(@RequestParam(defaultValue = "0") int newWordsMemorized) {
         String userId = SecurityUtil.getCurrentUserId();
-        return ResponseEntity.ok(userStreakService.recordStudyDay(userId, newWordsMemorized));
+        
+        com.english_study.model.dto.StudyStatEvent event = com.english_study.model.dto.StudyStatEvent.builder()
+                .userId(userId)
+                .newWords(newWordsMemorized)
+                .build();
+        rabbitTemplate.convertAndSend(com.english_study.config.RabbitMQConfig.STUDY_STAT_EXCHANGE, com.english_study.config.RabbitMQConfig.STUDY_STAT_ROUTING_KEY, event);
+        
+        return ResponseEntity.accepted().body(java.util.Collections.singletonMap("message", "Streak update processing in background"));
     }
 
     // -- User Daily Stat APIs --
@@ -100,5 +108,24 @@ public class UserController {
     public ResponseEntity<?> getMonthlyNewWords() {
         String userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.ok(userDailyStatService.getMonthlyNewWords(userId));
+    }
+
+    @PostMapping("/record-video-session")
+    public ResponseEntity<?> recordVideoSession(@RequestBody com.english_study.model.request.RecordVideoSessionRequest request) {
+        String userId = SecurityUtil.getCurrentUserId();
+        int xpGained = request.getCorrectScriptsCount() * 20;
+        
+        com.english_study.model.dto.StudyStatEvent event = com.english_study.model.dto.StudyStatEvent.builder()
+                .userId(userId)
+                .videoId(request.getVideoId())
+                .xpGained(xpGained)
+                .build();
+        rabbitTemplate.convertAndSend(com.english_study.config.RabbitMQConfig.STUDY_STAT_EXCHANGE, com.english_study.config.RabbitMQConfig.STUDY_STAT_ROUTING_KEY, event);
+        
+        if (xpGained > 0) {
+            userService.addXP(userId, xpGained);
+        }
+        
+        return ResponseEntity.ok(java.util.Collections.singletonMap("xpGained", xpGained));
     }
 }
