@@ -11,5 +11,9 @@ public interface NotificationService {
     
     // Gửi thông báo
     void sendBulkNotification(String targetType, String targetUserId, String title, String message, String createdBy);
+    
+    // Xử lý thông báo bất đồng bộ
+    void processBulkNotification(com.english_study.model.dto.BulkNotificationEvent event);
+    
     List<com.english_study.model.entity.NotificationLogEntity> getNotificationHistory();
 }

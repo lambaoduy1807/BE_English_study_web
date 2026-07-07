@@ -36,7 +36,7 @@ public class AdminNotificationController {
                 request.getMessage(),
                 SecurityUtil.getCurrentUserId()
         );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @Data

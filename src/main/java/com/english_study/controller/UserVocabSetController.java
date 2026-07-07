@@ -12,8 +12,10 @@ import com.english_study.sercurity.SecurityUtil;
 import com.english_study.service.UserDailyStatService;
 import com.english_study.service.UserService;
 import com.english_study.service.UserStreakService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.english_study.model.dto.StudyStatEvent;
+import com.english_study.config.RabbitMQConfig;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -23,8 +25,7 @@ public class UserVocabSetController {
 
     private final UserVocabSetService service;
     private final UserService userService;
-    private final UserDailyStatService userDailyStatService;
-    private final UserStreakService userStreakService;
+    private final RabbitTemplate rabbitTemplate;
 
     @PostMapping("/study-session")
     public ResponseEntity<?> recordStudySession(@RequestBody StudySessionRequest request) {
@@ -40,12 +41,15 @@ public class UserVocabSetController {
             request.getClozeWords()
         );
         
-        userDailyStatService.recordDailyStat(userId, request.getVocabId(), request.getNewWords(), request.getXpGained());
-        userService.addXP(userId, request.getXpGained());
+        StudyStatEvent event = StudyStatEvent.builder()
+                .userId(userId)
+                .vocabId(request.getVocabId())
+                .newWords(request.getNewWords())
+                .xpGained(request.getXpGained())
+                .build();
+        rabbitTemplate.convertAndSend(RabbitMQConfig.STUDY_STAT_EXCHANGE, RabbitMQConfig.STUDY_STAT_ROUTING_KEY, event);
         
-        if (request.getNewWords() > 0) {
-            userStreakService.recordStudyDay(userId, request.getNewWords());
-        }
+        userService.addXP(userId, request.getXpGained());
         
         return ResponseEntity.ok(updatedSet);
     }

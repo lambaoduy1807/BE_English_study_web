@@ -7,17 +7,27 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class JwtUtil {
 
-    // Secret key (>= 32 ký tự cho HS256)
-    private static final String SECRET = "my-secret-key-my-secret-key-my-secret-key";
+    @Value("${jwt.secret}")
+    private String secret;
 
-    // 1 giờ
-    private static final long EXPIRATION = 1000 * 60 * 60;
+    @Value("${jwt.access-token-expiration}")
+    private long accessExpiration;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    @Value("${jwt.refresh-token-expiration}")
+    private long refreshExpiration;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     /**
      * Tạo JWT token
@@ -30,7 +40,7 @@ public class JwtUtil {
                 .claim("email", user.getEmail())
                 .claim("role", user.getRoleId())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -111,7 +121,7 @@ public class JwtUtil {
                 .claim("type", "refresh")
                 .setSubject(userId)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
