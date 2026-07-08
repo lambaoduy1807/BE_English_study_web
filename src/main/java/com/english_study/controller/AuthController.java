@@ -29,6 +29,16 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(registerRequest));
     }
 
+    @GetMapping("/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        return ResponseEntity.ok(Map.of("exists", authService.checkUsernameExists(username)));
+    }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email) {
+        return ResponseEntity.ok(Map.of("exists", authService.checkEmailExists(email)));
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestBody RefreshTokenRequest refreshToken) {
         return ResponseEntity.ok(authService.refreshToken(refreshToken.refreshToken()));
