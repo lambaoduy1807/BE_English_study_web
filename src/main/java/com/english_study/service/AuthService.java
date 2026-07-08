@@ -48,6 +48,14 @@ public class AuthService {
         return new TokenResponse(refreshToken, accessToken, userDTO);
     }
 
+    public boolean checkUsernameExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean checkEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public String register(RegisterRequest request) {
         String verificationToken = UUID.randomUUID().toString();
         
